@@ -2,7 +2,7 @@ param(
     [ValidateSet("Debug", "Release")]
     [string] $Configuration = "Release",
 
-    [string] $LineRoot = "OAN Mortalis V1.2.1",
+    [string] $LineRoot = ".",
 
     [ValidateRange(1, 7200)]
     [int] $VerificationLockTimeoutSeconds = 900,
@@ -35,7 +35,7 @@ $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $verificationLockScriptPath = Join-Path $repoRoot "tools\Use-LineVerificationLock.ps1"
 $activeBuildRoot = Join-Path $repoRoot $LineRoot
 $lineManifestPath = Join-Path $activeBuildRoot "build\line-manifest.json"
-$solutionRelativePath = "Oan.sln"
+$solutionRelativePath = "San.sln"
 
 if (-not (Test-Path -LiteralPath $verificationLockScriptPath -PathType Leaf)) {
     throw "Line verification lock helper not found at '$verificationLockScriptPath'."
@@ -137,7 +137,7 @@ if (-not [string]::IsNullOrWhiteSpace($AssemblyVersion)) {
 }
 
 Write-Host "[build] Solution: $solutionPath"
-Write-Host "[build] Line root: $LineRoot"
+Write-Host "[build] Tool root: $activeBuildRoot"
 Write-Host "[build] Configuration: $Configuration"
 Write-Host "[build] Verification lock timeout seconds: $VerificationLockTimeoutSeconds"
 if (-not [string]::IsNullOrWhiteSpace($BuildVersion)) {

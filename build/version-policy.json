@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 2,
+  "versionOwner": "Directory.Build.props",
+  "versionScheme": "ToolSemVer",
+  "currentVersion": "0.2.0",
+  "currentAssemblyVersion": "0.2.0.0",
+  "releaseTag": "v0.2.0-standalone-tool",
+  "discipline": {
+    "toolPackagesAreStandalone": true,
+    "supportingDocumentationBundled": false,
+    "legacyLineFoldersBundled": false,
+    "releaseNotesLiveOutsidePayload": true
+  },
+  "reasonCodes": {
+    "major": "version-major-interface-break",
+    "minor": "version-minor-tool-surface-change",
+    "patch": "version-patch-fix"
+  }
+}

@@ -1,6 +1,0 @@
-Solution: San.sln
-Current runnable truth: OAN Mortalis V1.2.1
-Notice: Root build and test wrappers now default to this line. V1.1.1 is retained as parent, reference, and fallback.
-Expected build command: .\build.ps1 -Configuration Release
-Activation: Runtime, model, GEL, CME.Actual, and Sanctuary.Actual authority remain refused unless separately authorized.
-Rules: See docs/WORKSPACE_RULES.md

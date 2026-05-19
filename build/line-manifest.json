@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 2,
+  "lineName": "Project Bicycle",
+  "lineVersion": "0.2.0",
+  "posture": "standalone-tool-body",
+  "stateClass": "ToolRelease",
+  "umbrellaFamily": "San.*",
+  "reservedFutureToolFamily": "OAN.*",
+  "solutionPath": "San.sln",
+  "parentLine": "",
+  "archivedParent": true,
+  "activeExecutableTruth": "Project Bicycle",
+  "buildable": true,
+  "sourceMaterialized": true,
+  "runtimeMaterialized": false,
+  "documentationBundled": false,
+  "legacyLineFoldersBundled": false,
+  "notes": [
+    "Project Bicycle v0.2.0 is a standalone root-level tool package.",
+    "The package intentionally excludes doctrine docs and legacy line folders.",
+    "Activation, model binding, runtime identity, runtime action, database write, GEL promotion, CME.Actual, and Sanctuary.Actual remain refused."
+  ]
+}

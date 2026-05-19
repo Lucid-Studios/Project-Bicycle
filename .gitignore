@@ -1,0 +1,39 @@
+# Build outputs
+**/bin/
+**/obj/
+**/TestResults/
+
+# IDE/editor settings
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Logs and diagnostics
+*.log
+*.binlog
+/.audit/
+
+# Machine-local and private working material
+/.local/
+/.local-private/
+/runtime/
+/models/
+/private-runtime/
+/private-corpus/
+/local-artifacts/
+
+# Local scratch and cache output
+**/.cache/
+**/tmp/
+**/temp/
+
+# Large local model/container artifacts
+*.qcow2
+*.img
+*.vmdk
+*.vhd
+*.vhdx
+*.gguf
+*.pt
+*.bin

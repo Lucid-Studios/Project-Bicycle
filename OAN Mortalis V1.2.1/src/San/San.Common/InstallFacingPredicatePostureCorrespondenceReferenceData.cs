@@ -1,0 +1,143 @@
+namespace San.Common;
+
+public static class InstallFacingPredicatePostureCorrespondenceReferenceData
+{
+    public static InstallFacingPredicatePostureCorrespondenceSet Canonical { get; } =
+        new(
+            new[]
+            {
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.InstallFacingPostureMeaning,
+                    Lane: InstallFacingPredicatePostureLane.Posture,
+                    PredicateFamily: SanctuaryGelPredicateFamily.Posture,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.InstallFacing,
+                    InstallFacingPhrase: "we are working in an install-facing posture",
+                    InstallFacingSummary: "bounded install-first wording for the current install-facing stance",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: false,
+                    HdtSupportEligible: true),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.InstallFacingPostureMeaning,
+                    Lane: InstallFacingPredicatePostureLane.Posture,
+                    PredicateFamily: SanctuaryGelPredicateFamily.Posture,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.ConversationalMovement,
+                    InstallFacingPhrase: "we are moving conversationally and deliberately through this footing",
+                    InstallFacingSummary: "install-facing wording for lived conversational movement",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: false,
+                    HdtSupportEligible: true),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.InstallFacingPostureMeaning,
+                    Lane: InstallFacingPredicatePostureLane.Posture,
+                    PredicateFamily: SanctuaryGelPredicateFamily.Posture,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.GoverningSeatCandidate,
+                    InstallFacingPhrase: "this footing is being held as a first governing-seat candidate",
+                    InstallFacingSummary: "bounded wording for first governing-seat candidate posture",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: true,
+                    HdtSupportEligible: true),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.InstallFacingPostureMeaning,
+                    Lane: InstallFacingPredicatePostureLane.Posture,
+                    PredicateFamily: SanctuaryGelPredicateFamily.Posture,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.ResearchAttached,
+                    InstallFacingPhrase: "this line remains research-attached in its current posture",
+                    InstallFacingSummary: "install-facing wording for research-attached footing",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: false,
+                    HdtSupportEligible: true),
+
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.TrustAuthorizationMeaning,
+                    Lane: InstallFacingPredicatePostureLane.TrustAuthorization,
+                    PredicateFamily: SanctuaryGelPredicateFamily.TrustAuthorization,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.CertifiedCommunication,
+                    InstallFacingPhrase: "this lane is certified for communication",
+                    InstallFacingSummary: "trust wording for certified communication footing",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: true,
+                    HdtSupportEligible: true),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.TrustAuthorizationMeaning,
+                    Lane: InstallFacingPredicatePostureLane.TrustAuthorization,
+                    PredicateFamily: SanctuaryGelPredicateFamily.TrustAuthorization,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.RegionalPackageAdmitted,
+                    InstallFacingPhrase: "the admitted regional package for this install is in force",
+                    InstallFacingSummary: "trust wording for admitted regional package footing",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: true,
+                    HdtSupportEligible: true),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.TrustAuthorizationMeaning,
+                    Lane: InstallFacingPredicatePostureLane.TrustAuthorization,
+                    PredicateFamily: SanctuaryGelPredicateFamily.TrustAuthorization,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.UniversalAtlasAuthorityWithheld,
+                    InstallFacingPhrase: "universal Atlas authority remains withheld from this local install",
+                    InstallFacingSummary: "trust wording for withheld universal Atlas authority",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: true,
+                    HdtSupportEligible: false),
+
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.EvidenceFootingMeaning,
+                    Lane: InstallFacingPredicatePostureLane.EvidenceFooting,
+                    PredicateFamily: SanctuaryGelPredicateFamily.EvidenceFooting,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.AssentWitnessed,
+                    InstallFacingPhrase: "this footing stands on witnessed assent",
+                    InstallFacingSummary: "evidence wording for assent witness presence",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: false,
+                    HdtSupportEligible: true),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.EvidenceFootingMeaning,
+                    Lane: InstallFacingPredicatePostureLane.EvidenceFooting,
+                    PredicateFamily: SanctuaryGelPredicateFamily.EvidenceFooting,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.PackageWitnessed,
+                    InstallFacingPhrase: "the active package footing is witnessed",
+                    InstallFacingSummary: "evidence wording for admitted package witness presence",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: false,
+                    HdtSupportEligible: true),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.EvidenceFootingMeaning,
+                    Lane: InstallFacingPredicatePostureLane.EvidenceFooting,
+                    PredicateFamily: SanctuaryGelPredicateFamily.EvidenceFooting,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.PredicateInheritanceWitnessed,
+                    InstallFacingPhrase: "predicate inheritance is witnessed in this line",
+                    InstallFacingSummary: "evidence wording for bounded predicate inheritance witness",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: false,
+                    HdtSupportEligible: true),
+
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.ResponseDispositionMeaning,
+                    Lane: InstallFacingPredicatePostureLane.ResponseDisposition,
+                    PredicateFamily: SanctuaryGelPredicateFamily.ResponseDisposition,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.Ready,
+                    InstallFacingPhrase: "this footing is ready to proceed within its current bounds",
+                    InstallFacingSummary: "response wording for ready posture",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: false,
+                    HdtSupportEligible: true),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.ResponseDispositionMeaning,
+                    Lane: InstallFacingPredicatePostureLane.ResponseDisposition,
+                    PredicateFamily: SanctuaryGelPredicateFamily.ResponseDisposition,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.Silence,
+                    InstallFacingPhrase: "this lane remains silent",
+                    InstallFacingSummary: "response wording for silent non-passage",
+                    OperatorVisible: false,
+                    CertifiedLaneOnly: true,
+                    HdtSupportEligible: false),
+                new InstallFacingPredicatePostureCorrespondence(
+                    PayloadMeaningKind: InstallFacingPayloadMeaningKind.ResponseDispositionMeaning,
+                    Lane: InstallFacingPredicatePostureLane.ResponseDisposition,
+                    PredicateFamily: SanctuaryGelPredicateFamily.ResponseDisposition,
+                    PredicateCandidateKind: SanctuaryGelPredicateCandidateKind.Refused,
+                    InstallFacingPhrase: "this footing is refused in its current form",
+                    InstallFacingSummary: "response wording for explicit bounded refusal",
+                    OperatorVisible: true,
+                    CertifiedLaneOnly: true,
+                    HdtSupportEligible: true)
+            });
+}

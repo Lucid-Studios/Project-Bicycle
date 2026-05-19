@@ -12,12 +12,13 @@
     "read line manifest",
     "read lab context anchors",
     "read build-testing pointer",
+    "live-load resident SLI.Lisp membrane through SBCL",
     "emit verification report"
   ],
   "blockedActions": [
     "runtime activation",
     "model binding",
-    "Lisp evaluation",
+    "arbitrary Lisp evaluation",
     "runtime identity emission",
     "runtime action",
     "database write",

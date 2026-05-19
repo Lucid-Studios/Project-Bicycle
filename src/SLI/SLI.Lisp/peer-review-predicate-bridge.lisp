@@ -157,7 +157,7 @@
             "reader continuity requires examples, tests, and harm conditions before accepting the stronger claim"
             "conceptually strong but not demonstrated"
             "retain as proposed failure mode, not established result"
-            :speculative)))
+            :speculative))
         :review-only t
         :terminology-quarantined t
         :reader-state-continuity-mapped t

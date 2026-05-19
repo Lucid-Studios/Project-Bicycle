@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "versionOwner": "Directory.Build.props",
   "versionScheme": "ToolSemVer",
-  "currentVersion": "0.2.1",
-  "currentAssemblyVersion": "0.2.1.0",
-  "releaseTag": "v0.2.1-readme-test-pointer",
+  "currentVersion": "0.3.0",
+  "currentAssemblyVersion": "0.3.0.0",
+  "releaseTag": "v0.3.0-live-lisp-load",
   "discipline": {
     "toolPackagesAreStandalone": true,
     "readmeBundled": true,

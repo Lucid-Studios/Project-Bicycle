@@ -24,6 +24,13 @@
 (defun transport-status (status)
   (list :transport-status status))
 
+(defmacro transport-composite (composite-name &rest clauses)
+  `'(transport-composite
+     :composite-name ,composite-name
+     :clauses ,clauses
+     :runtime-load-only t
+     :authorizes-transport nil))
+
 ;; Bounded composition catalog.
 ;; The bridge expands these forms deterministically and does not grant
 ;; admissibility, Sanctuary intake, custody mutation, or accountability.

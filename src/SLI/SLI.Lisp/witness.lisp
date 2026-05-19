@@ -24,6 +24,13 @@
 (defun morphism-candidate ()
   (list :morphism-candidate))
 
+(defmacro witness-composite (composite-name &rest clauses)
+  `'(witness-composite
+     :composite-name ,composite-name
+     :clauses ,clauses
+     :runtime-load-only t
+     :authorizes-gluing nil))
+
 ;; Bounded composition catalog.
 ;; The bridge expands these forms deterministically and does not grant
 ;; lawful transport, Sanctuary intake, or automatic gluing.

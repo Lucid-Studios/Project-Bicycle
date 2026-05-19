@@ -28,6 +28,13 @@
 (defun surface-status (status)
   (list :surface-status status))
 
+(defmacro admissibility-composite (composite-name &rest clauses)
+  `'(admissibility-composite
+     :composite-name ,composite-name
+     :clauses ,clauses
+     :runtime-load-only t
+     :admits-surface nil))
+
 ;; Bounded composition catalog.
 ;; The bridge expands these forms deterministically and does not grant
 ;; Sanctuary intake, accountability, custody mutation, or governed identity.

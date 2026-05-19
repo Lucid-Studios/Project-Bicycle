@@ -14,9 +14,24 @@ CME.Actual, Sanctuary.Actual, or production readiness.
 - build metadata: `build/`
 - wrapper scripts: `build.ps1` and `test.ps1`
 - hygiene tooling: `tools/`
+- SLI.Lisp membrane source: `src/SLI/SLI.Lisp/`
 
 The package intentionally does not include legacy OAN Mortalis line folders or
 doctrine-documentation bundles.
+
+## SLI.Lisp Is Code Body
+
+SLI.Lisp is part of the tool body's code membrane. This release live-loads the
+resident SLI.Lisp membrane through SBCL during the test lane, using the embedded
+Lisp resources carried by the .NET package.
+
+Live load means the Lisp body is read by a real Common Lisp runtime. It does not
+mean arbitrary Lisp evaluation is open, runtime action is authorized, or
+CME.Actual / Sanctuary.Actual has been granted.
+
+Future Lisp execution lanes beyond resident membrane load require explicit
+authority gates. Arbitrary eval, model binding, action, GEL promotion, and
+activation remain refused.
 
 ## Core Law
 
@@ -30,6 +45,8 @@ Every role returns to balance.
 Install:
 
 - .NET SDK 8.0
+- Steel Bank Common Lisp (SBCL), available as `sbcl` on PATH or through
+  `SLI_LISP_RUNTIME`
 - PowerShell
 - Git, if cloning instead of downloading the release zip
 
@@ -49,12 +66,13 @@ Run the wrapper path:
 Expected result for this release:
 
 ```text
-3092 passed
+3095 passed
 0 failed
 ```
 
 A passing run means the cold tool body built and preserved its refusal
-boundaries under test. It does not grant runtime authority, model binding, Lisp
+boundaries under test, including live SBCL loading of the resident SLI.Lisp
+membrane. It does not grant runtime authority, model binding, arbitrary Lisp
 evaluation, GEL promotion, CME.Actual, Sanctuary.Actual, diagnostic authority,
 medical authority, legal authority, custody authority, or production readiness.
 

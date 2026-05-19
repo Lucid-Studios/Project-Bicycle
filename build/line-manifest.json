@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "lineName": "Project Bicycle",
-  "lineVersion": "0.2.1",
+  "lineVersion": "0.3.0",
   "posture": "standalone-tool-body",
   "stateClass": "ToolRelease",
   "umbrellaFamily": "San.*",
@@ -13,12 +13,15 @@
   "buildable": true,
   "sourceMaterialized": true,
   "runtimeMaterialized": false,
+  "lispRuntimeLoadMaterialized": true,
   "readmeBundled": true,
   "doctrineDocumentationBundled": false,
   "legacyLineFoldersBundled": false,
   "notes": [
-    "Project Bicycle v0.2.1 is a standalone root-level tool package.",
+    "Project Bicycle v0.3.0 is a standalone root-level tool package.",
     "The root README is a testing pointer and quick-start surface, not a doctrine bundle.",
+    "SLI.Lisp is part of the code membrane; resident SBCL runtime load is materialized in this cold lane.",
+    "Arbitrary Lisp eval, model binding, runtime action, activation, GEL promotion, CME.Actual, and Sanctuary.Actual remain refused.",
     "The package intentionally excludes doctrine docs and legacy line folders.",
     "Activation, model binding, runtime identity, runtime action, database write, GEL promotion, CME.Actual, and Sanctuary.Actual remain refused."
   ]

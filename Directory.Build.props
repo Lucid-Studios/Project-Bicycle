@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <SanBuildVersion Condition="'$(SanBuildVersion)' == ''">0.2.0</SanBuildVersion>
-    <SanAssemblyVersion Condition="'$(SanAssemblyVersion)' == ''">0.2.0.0</SanAssemblyVersion>
+    <SanBuildVersion Condition="'$(SanBuildVersion)' == ''">0.2.1</SanBuildVersion>
+    <SanAssemblyVersion Condition="'$(SanAssemblyVersion)' == ''">0.2.1.0</SanAssemblyVersion>
     <Version>$(SanBuildVersion)</Version>
     <FileVersion>$(SanAssemblyVersion)</FileVersion>
     <AssemblyVersion>$(SanAssemblyVersion)</AssemblyVersion>

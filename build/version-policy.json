@@ -2,12 +2,13 @@
   "schemaVersion": 2,
   "versionOwner": "Directory.Build.props",
   "versionScheme": "ToolSemVer",
-  "currentVersion": "0.2.0",
-  "currentAssemblyVersion": "0.2.0.0",
-  "releaseTag": "v0.2.0-standalone-tool",
+  "currentVersion": "0.2.1",
+  "currentAssemblyVersion": "0.2.1.0",
+  "releaseTag": "v0.2.1-readme-test-pointer",
   "discipline": {
     "toolPackagesAreStandalone": true,
-    "supportingDocumentationBundled": false,
+    "readmeBundled": true,
+    "doctrineDocumentationBundled": false,
     "legacyLineFoldersBundled": false,
     "releaseNotesLiveOutsidePayload": true
   },

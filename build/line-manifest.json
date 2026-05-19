@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "lineName": "Project Bicycle",
-  "lineVersion": "0.2.0",
+  "lineVersion": "0.2.1",
   "posture": "standalone-tool-body",
   "stateClass": "ToolRelease",
   "umbrellaFamily": "San.*",
@@ -13,10 +13,12 @@
   "buildable": true,
   "sourceMaterialized": true,
   "runtimeMaterialized": false,
-  "documentationBundled": false,
+  "readmeBundled": true,
+  "doctrineDocumentationBundled": false,
   "legacyLineFoldersBundled": false,
   "notes": [
-    "Project Bicycle v0.2.0 is a standalone root-level tool package.",
+    "Project Bicycle v0.2.1 is a standalone root-level tool package.",
+    "The root README is a testing pointer and quick-start surface, not a doctrine bundle.",
     "The package intentionally excludes doctrine docs and legacy line folders.",
     "Activation, model binding, runtime identity, runtime action, database write, GEL promotion, CME.Actual, and Sanctuary.Actual remain refused."
   ]

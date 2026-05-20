@@ -16,8 +16,8 @@ public sealed class TypedWarmUseBenchPublicationTests
         Assert.True(File.Exists(readmePath));
 
         var rawJson = File.ReadAllText(benchPath);
-        Assert.DoesNotContain("D:\\", rawJson, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("C:\\", rawJson, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(DrivePrefix("D"), rawJson, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(DrivePrefix("C"), rawJson, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("AppData", rawJson, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("codex-worktrees", rawJson, StringComparison.OrdinalIgnoreCase);
 
@@ -65,6 +65,8 @@ public sealed class TypedWarmUseBenchPublicationTests
             priorReceipt = turn.GetProperty("receiptHandle").GetString();
         }
     }
+
+    private static string DrivePrefix(string driveLetter) => driveLetter + @":\";
 
     private static string FindLineRoot()
     {

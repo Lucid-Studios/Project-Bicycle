@@ -32,8 +32,8 @@ mean arbitrary Lisp evaluation is open, runtime action is authorized, or
 CME.Actual / Sanctuary.Actual has been granted.
 
 Future Lisp execution lanes beyond resident membrane load require explicit
-authority gates. Arbitrary eval, model binding, action, GEL promotion, and
-activation remain refused.
+authority gates. Arbitrary eval, model binding, action, GEL promotion, GEL
+admission, engram admission, SelfGEL mutation, and activation remain refused.
 
 ## Sanctuary Installed Body
 
@@ -133,6 +133,39 @@ bench/typed-warm-use-rehearsal/typed-warm-use-rehearsal-bench.v0.5.0.json
 That bench shows repeated live scoped ingress with prior-turn receipt lineage
 and append-only session ledger evidence while preserving non-admission.
 
+## Lab GEL Engrammitization
+
+The first pre-admission learning lane is also SLI.Lisp-owned:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" lab-gel --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary" --operator-name "YourNameHere" --domain "Civic" --role "PaternalCareAssistance" --job-class "Listening" --session-id "lab-gel-session" --turn-index 0 --thought "Predicate residue can become lab substrate without becoming memory."
+```
+
+The host installs the cold Sanctuary body, runs typed warm-use, then invokes the
+bounded Lisp entrypoint `run-lab-gel-engrammitization`. That lane forms:
+
+- lab GEL predicate receipts;
+- an evidence body;
+- a witness body;
+- a pre-admission engram candidate;
+- a cooling receipt;
+- a Steward pre-admission review;
+- and a lab readback receipt.
+
+This is a lab substrate lane. It does not admit GEL, admit an engram, admit
+memory, mutate SelfGEL, admit continuity, grant authority, authorize action,
+activate CME.Actual, or grant Sanctuary.Actual.
+
+The first six-turn bench lives at:
+
+```text
+bench/lab-gel-engrammitization/README.md
+bench/lab-gel-engrammitization/lab-gel-engrammitization-bench.v0.6.0.json
+```
+
+That bench shows warm-use residue becoming inspectable lab GEL predicate and
+engram-candidate substrate while every admission and action gate remains closed.
+
 ## Core Law
 
 The bicycle is not the rider.
@@ -166,7 +199,7 @@ Run the wrapper path:
 Expected result for this release:
 
 ```text
-3112 passed
+3118 passed
 0 failed
 ```
 

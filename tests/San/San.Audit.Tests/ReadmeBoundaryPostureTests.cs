@@ -16,8 +16,8 @@ public sealed class ReadmeBoundaryPostureTests
         Assert.Contains("resident SLI.Lisp membrane through SBCL", readme, StringComparison.Ordinal);
         Assert.Contains("Live load means the Lisp body is read by a real Common Lisp runtime", readme, StringComparison.Ordinal);
         Assert.Contains("arbitrary Lisp evaluation is open", readme, StringComparison.Ordinal);
-        Assert.Contains("Arbitrary eval, model binding, action, GEL promotion, and", readme, StringComparison.Ordinal);
-        Assert.Contains("activation remain refused", readme, StringComparison.Ordinal);
+        Assert.Contains("Arbitrary eval, model binding, action, GEL promotion, GEL", readme, StringComparison.Ordinal);
+        Assert.Contains("admission, engram admission, SelfGEL mutation, and activation remain refused", readme, StringComparison.Ordinal);
     }
 
     private static string FindLineRoot()

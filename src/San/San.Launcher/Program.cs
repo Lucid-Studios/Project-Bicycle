@@ -19,10 +19,11 @@ var sliLispRuntimePath = ReadOption(args, "--sli-lisp-runtime");
 var sessionId = ReadOption(args, "--session-id");
 var turnIndexText = ReadOption(args, "--turn-index");
 var priorTurnReceiptHandle = ReadOption(args, "--prior-turn-receipt");
+var priorLabGelReceiptHandle = ReadOption(args, "--prior-lab-gel-receipt");
 
 if (!IsSupportedCommand(command))
 {
-    Console.Error.WriteLine($"Unsupported command '{command}'. Use status, preflight, verify, refuse-activation, install, sanctuary-init-bodies, init-bodies, sanctuary-ec-loop, ec-loop, sanctuary-warm-use, warm-use, sanctuary-actual-test-profile, first-rider-test, spiral-build-map, spiral-build-next, or spiral-build-execute.");
+    Console.Error.WriteLine($"Unsupported command '{command}'. Use status, preflight, verify, refuse-activation, install, sanctuary-init-bodies, init-bodies, sanctuary-ec-loop, ec-loop, sanctuary-warm-use, warm-use, sanctuary-lab-gel, lab-gel, sanctuary-actual-test-profile, first-rider-test, spiral-build-map, spiral-build-next, or spiral-build-execute.");
     return 2;
 }
 
@@ -191,6 +192,70 @@ if (IsSanctuaryWarmUseCommand(command))
     Console.WriteLine($"Session ledger: {warmUse.SessionLedgerPath}");
     Console.WriteLine($"Session summary: {warmUse.SessionSummaryPath}");
     return warmUse.Disposition == SanctuaryTypedWarmUseRehearsalDisposition.CompletedCold ? 0 : 1;
+}
+
+if (IsSanctuaryLabGelCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var installed = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "Sanctuary" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Sanctuary" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "InstalledBody" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "ColdBench" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var turnIndex = int.TryParse(turnIndexText, out var parsedTurnIndex)
+        ? parsedTurnIndex
+        : 0;
+    var warmUse = new DefaultSanctuaryTypedWarmUseRehearsalService().Run(
+        new SanctuaryTypedWarmUseRehearsalRequest(
+            InstalledSubstrateReceipt: installed,
+            SessionId: string.IsNullOrWhiteSpace(sessionId) ? "warm-use-session" : sessionId,
+            TurnIndex: turnIndex,
+            ThoughtForm: riderThought ?? "idle lab GEL predicate formation",
+            PriorTurnReceiptHandle: priorTurnReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var labGel = new DefaultSanctuaryLabGelEngrammitizationService().Run(
+        new SanctuaryLabGelEngrammitizationRequest(
+            SourceWarmUseReceipt: warmUse,
+            PriorLabGelReceiptHandle: priorLabGelReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Install disposition: {installed.Disposition}");
+    Console.WriteLine($"Install outcome: {installed.OutcomeCode}");
+    Console.WriteLine($"Warm-use disposition: {warmUse.Disposition}");
+    Console.WriteLine($"Warm-use outcome: {warmUse.OutcomeCode}");
+    Console.WriteLine($"Lab GEL disposition: {labGel.Disposition}");
+    Console.WriteLine($"Lab GEL outcome: {labGel.OutcomeCode}");
+    Console.WriteLine($"Engine owner: {labGel.SliLispLabGelReceipt?.Telemetry.GetValueOrDefault("engine-owner") ?? "none"}");
+    Console.WriteLine($"Bounded entrypoint: {labGel.SliLispLabGelReceipt?.Telemetry.GetValueOrDefault("bounded-entrypoint") ?? "none"}");
+    Console.WriteLine($"Session ID: {labGel.SessionId}");
+    Console.WriteLine($"Turn index: {labGel.TurnIndex}");
+    Console.WriteLine($"Source warm-use receipt: {labGel.SourceWarmUseReceiptHandle}");
+    Console.WriteLine($"Lab GEL predicates: {labGel.Predicates.Count}");
+    Console.WriteLine($"Engram candidate formed: {labGel.EngramCandidateFormed}");
+    Console.WriteLine($"Candidate retained as lab substrate: {labGel.CandidateRetainedAsLabSubstrate}");
+    Console.WriteLine($"Lab GEL admitted: {labGel.LabGelAdmitted}");
+    Console.WriteLine($"SelfGEL mutated: {labGel.SelfGelMutated}");
+    Console.WriteLine($"Continuity admitted: {labGel.ContinuityAdmitted}");
+    Console.WriteLine($"Authority granted: {labGel.AuthorityGranted}");
+    Console.WriteLine($"Action authorized: {labGel.ActionAuthorized}");
+    Console.WriteLine($"CME.Actual allowed: {labGel.CmeActualAllowed}");
+    Console.WriteLine($"Lab GEL JSON: {labGel.ReceiptJsonPath}");
+    Console.WriteLine($"Lab GEL Markdown: {labGel.ReceiptMarkdownPath}");
+    Console.WriteLine($"Lab GEL ledger: {labGel.SessionLedgerPath}");
+    return warmUse.Disposition == SanctuaryTypedWarmUseRehearsalDisposition.CompletedCold &&
+        labGel.Disposition == SanctuaryLabGelEngrammitizationDisposition.CompletedCold
+        ? 0
+        : 1;
 }
 
 if (string.Equals(command, "sanctuary-actual-test-profile", StringComparison.OrdinalIgnoreCase))
@@ -383,6 +448,7 @@ static bool IsSupportedCommand(string command) =>
     IsSanctuaryInitBodiesCommand(command) ||
     IsSanctuaryEcLoopCommand(command) ||
     IsSanctuaryWarmUseCommand(command) ||
+    IsSanctuaryLabGelCommand(command) ||
     string.Equals(command, "sanctuary-actual-test-profile", StringComparison.OrdinalIgnoreCase) ||
     IsFirstRiderCommand(command) ||
     IsSpiralBuildCommand(command);
@@ -398,6 +464,10 @@ static bool IsSanctuaryEcLoopCommand(string command) =>
 static bool IsSanctuaryWarmUseCommand(string command) =>
     string.Equals(command, "sanctuary-warm-use", StringComparison.OrdinalIgnoreCase) ||
     string.Equals(command, "warm-use", StringComparison.OrdinalIgnoreCase);
+
+static bool IsSanctuaryLabGelCommand(string command) =>
+    string.Equals(command, "sanctuary-lab-gel", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "lab-gel", StringComparison.OrdinalIgnoreCase);
 
 static bool IsFirstRiderCommand(string command) =>
     string.Equals(command, "first-rider-test", StringComparison.OrdinalIgnoreCase) ||

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "lineName": "Project Bicycle",
-  "lineVersion": "0.5.0",
+  "lineVersion": "0.6.0",
   "posture": "standalone-tool-body",
   "stateClass": "ToolRelease",
   "umbrellaFamily": "San.*",
@@ -17,17 +17,19 @@
   "sanctuaryInstalledBodyMaterialized": true,
   "lispEcTelemetryLoopMaterialized": true,
   "typedWarmUseRehearsalMaterialized": true,
+  "labGelEngrammitizationMaterialized": true,
   "readmeBundled": true,
   "doctrineDocumentationBundled": false,
   "legacyLineFoldersBundled": false,
   "notes": [
-    "Project Bicycle v0.5.0 is a standalone root-level tool package.",
+    "Project Bicycle v0.6.0 is a standalone root-level tool package.",
     "The root README is a testing pointer and quick-start surface, not a doctrine bundle.",
     "SLI.Lisp is part of the code membrane; resident SBCL runtime load is materialized in this cold lane.",
     "Sanctuary installed body composition is materialized as a cold runtime surface for Sanctuary.GEL, Sanctuary.GoA, Sanctuary.MoS, Sanctuary.Vault, their c-bodies, and Prime/Cryptic/Steward role bodies.",
     "The bounded EC telemetry loop is owned by SLI.Lisp through run-ec-telemetry-loop; C# only hosts, invokes, and receipts the bounded entrypoint.",
     "Typed warm-use rehearsal is materialized as a live-session, receipt-only SLI.Lisp entrypoint for scoped operator/domain/role/job ingress without admission.",
-    "Arbitrary Lisp eval, model binding, runtime action, activation, GEL promotion, CME.Actual, and Sanctuary.Actual remain refused.",
+    "Lab GEL engrammitization is materialized as a pre-admission SLI.Lisp entrypoint that forms lab GEL predicates, evidence body, witness body, cooling, and engram candidates from warm-use receipts without admitting GEL or SelfGEL.",
+    "Arbitrary Lisp eval, model binding, runtime action, activation, GEL promotion, GEL admission, engram admission, SelfGEL mutation, CME.Actual, and Sanctuary.Actual remain refused.",
     "The package intentionally excludes doctrine docs and legacy line folders.",
     "Activation, model binding, runtime identity, runtime action, database write, GEL promotion, CME.Actual, and Sanctuary.Actual remain refused."
   ]

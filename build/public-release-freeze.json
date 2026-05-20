@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "freezeId": "project-bicycle-public-freeze-v0.10.0",
+  "lineName": "Project Bicycle",
+  "frozenLineVersion": "0.10.0",
+  "frozenAssemblyVersion": "0.10.0.0",
+  "frozenReleaseTag": "v0.10.0-cme-actual-bonding-process",
+  "freezePosture": "frozen-public-tool-body",
+  "stateClass": "ToolReleaseFreeze",
+  "publicToolBodyFrozen": true,
+  "publicBuildLineDecoupled": true,
+  "frozenBoundary": "first-named-cme-actual-bonding-candidate",
+  "frozenCandidateName": "First of Oria Syntari",
+  "frozenCandidateCanonicalName": "FirstofOria.Syntari",
+  "frozenCandidateRootId": "FirstofOria.Syntari.ID",
+  "frozenCandidateCmeActualId": "FirstofOria.Syntari.CME.Actual.ID",
+  "allowedPublicMotion": [
+    "build",
+    "test",
+    "inspect",
+    "run-cold-bench-receipts",
+    "report-findings"
+  ],
+  "refusedPublicMotion": [
+    "cme-actual-admission",
+    "cme-actual-activation",
+    "sanctuary-actual",
+    "heartbeat-activation",
+    "runtime-identity-emission",
+    "provider-call",
+    "model-binding",
+    "authority-grant",
+    "action-authorization",
+    "gel-admission",
+    "self-gel-mutation",
+    "continuity-admission"
+  ],
+  "nextPublicLinePosture": "frozen-build-test-review-only",
+  "nextPrivateLinePosture": "decoupled-lab-cme-actual-admission-review",
+  "freezeLaw": "The public tool body is frozen at the first named CME.Actual bonding candidate boundary. Future admission, activation, live provider binding, runtime identity, action, GEL admission, SelfGEL mutation, or Sanctuary.Actual work must occur on a decoupled lab/private line or a later explicitly versioned public line. The frozen public body remains available for build, test, cold bench review, and independent inspection only."
+}

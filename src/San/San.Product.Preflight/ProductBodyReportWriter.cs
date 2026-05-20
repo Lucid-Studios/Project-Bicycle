@@ -41,6 +41,12 @@ public static class ProductBodyReportWriter
         builder.AppendLine($"- Active tool body: `{status.Manifest?.ActiveExecutableTruth ?? "unknown"}`");
         builder.AppendLine($"- Legacy parent bundled: `{status.RetainedParentPreserved}`");
         builder.AppendLine($"- Runtime materialized: `{status.RuntimeMaterialized}`");
+        builder.AppendLine($"- Public tool body frozen: `{status.Manifest?.PublicToolBodyFrozen.ToString() ?? "unknown"}`");
+        builder.AppendLine($"- Public freeze version: `{status.Manifest?.PublicFreezeVersion ?? "unknown"}`");
+        builder.AppendLine($"- Public build line decoupled: `{status.Manifest?.PublicBuildLineDecoupled.ToString() ?? "unknown"}`");
+        builder.AppendLine($"- Public freeze receipt: `{status.Manifest?.PublicFreezeReceiptPath ?? "unknown"}`");
+        builder.AppendLine($"- Next public line posture: `{status.Manifest?.NextPublicLinePosture ?? "unknown"}`");
+        builder.AppendLine($"- Next private line posture: `{status.Manifest?.NextPrivateLinePosture ?? "unknown"}`");
         builder.AppendLine();
         builder.AppendLine("## Activation Boundary");
         builder.AppendLine();

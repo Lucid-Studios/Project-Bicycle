@@ -6,6 +6,33 @@ It gives researchers a small, buildable package for testing governed cognition
 tool-use surfaces without treating successful motion as authority, continuity,
 CME.Actual, Sanctuary.Actual, or production readiness.
 
+## Public Freeze
+
+This public tool body is frozen at `0.10.0`.
+
+The frozen boundary is the first named CME.Actual bonding candidate:
+
+```text
+First of Oria Syntari
+FirstofOria.Syntari.ID
+FirstofOria.Syntari.CME.Actual.ID
+```
+
+The public package remains open for build, test, inspection, cold bench replay,
+and public issue reporting. It is not the line for future admission,
+activation, live provider binding, runtime identity, action, GEL admission,
+SelfGEL mutation, heartbeat activation, CME.Actual, or Sanctuary.Actual work.
+
+Those next steps are decoupled from this public build line and must occur in a
+lab/private line or in a later explicitly versioned public line. No future
+private/lab motion should silently mutate the frozen public claim.
+
+The freeze receipt lives at:
+
+```text
+build/public-release-freeze.json
+```
+
 ## What This Package Contains
 
 - root solution: `San.sln`
@@ -150,7 +177,8 @@ bounded Lisp entrypoint `run-lab-gel-engrammitization`. That lane forms:
 - a pre-admission engram candidate;
 - a cooling receipt;
 - a Steward pre-admission review;
-- and a lab readback receipt.
+- a lab readback receipt;
+- and a pre-admission engram closure payload.
 
 This is a lab substrate lane. It does not admit GEL, admit an engram, admit
 memory, mutate SelfGEL, admit continuity, grant authority, authorize action,
@@ -163,8 +191,213 @@ bench/lab-gel-engrammitization/README.md
 bench/lab-gel-engrammitization/lab-gel-engrammitization-bench.v0.6.0.json
 ```
 
-That bench shows warm-use residue becoming inspectable lab GEL predicate and
-engram-candidate substrate while every admission and action gate remains closed.
+That bench shows warm-use residue becoming inspectable lab GEL predicate,
+engram-candidate, and closure substrate while every admission and action gate
+remains closed.
+
+## Tool Body Idle State
+
+The first non-LLM-maintained idle lane is SLI.Lisp-owned:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" tool-idle --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary" --operator-name "YourNameHere" --domain "Civic" --role "PaternalCareAssistance" --job-class "Listening" --session-id "tool-body-idle-session" --turn-index 0 --thought "The Sanctuary body can idle without model maintenance."
+```
+
+The host installs the cold Sanctuary body, runs the EC loop, runs typed
+warm-use, forms lab GEL substrate, then invokes the bounded Lisp entrypoint
+`run-tool-body-idle-state`. This lane proves the instrument can rest in a cold
+idle posture before any future rider is seated.
+
+In this lane:
+
+- Prime, Cryptic, and Steward governing CME C# bodies are built;
+- their CME SLI.Lisp actualization surfaces are ready;
+- the governing heartbeat is healthy as callability telemetry;
+- EC can be locally held in Lisp without calling the external LLM engine;
+- governance SLM / micro-LM routing-switch support is marked desirable for
+  future work as an intelligent switch that may help discern action readiness,
+  but it is not present, is not required for this idle posture, and cannot
+  authorize action;
+- the future model adapter surface is approachable, but not installed.
+
+This is not an LLM tick, model binding, provider call, action authority,
+heartbeat activation into operational Actual, GEL admission, SelfGEL mutation,
+CME.Actual, or Sanctuary.Actual.
+
+The first six-turn bench lives at:
+
+```text
+bench/tool-body-idle-state/README.md
+bench/tool-body-idle-state/tool-body-idle-state-bench.v0.9.2.json
+```
+
+That bench shows `maintainedBySanctuary: true`, `maintainedByLlm: false`,
+`ecMaintainedInLisp: true`, `llmEngineCallRequired: false`,
+`governingHeartbeatHealthy: true`, and `readyForLlmAdapter: true` while model
+binding, provider calls, tick loops, authority, action, GEL/SelfGEL admission,
+heartbeat activation into operational Actual, CME.Actual, and Sanctuary.Actual
+remain false.
+
+## Agent Engine Idle Readiness
+
+The first engine-seat lane is SLI.Lisp-owned and provider-neutral:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" agent-idle --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary" --operator-name "YourNameHere" --domain "Civic" --role "PaternalCareAssistance" --job-class "Listening" --session-id "agent-engine-idle-session" --turn-index 0 --thought "A provider-neutral engine LLM may sit as a candidate without becoming authority."
+```
+
+The host installs the cold Sanctuary body, runs typed warm-use, forms lab GEL
+predicate substrate, then invokes the bounded Lisp entrypoint
+`run-agent-engine-idle-readiness`. That lane stages:
+
+- a provider-neutral engine LLM seat candidate;
+- a Codex/agent lab test profile;
+- subagent seat candidate support;
+- an operator-authority-required gate;
+- a locked action-executor gate;
+- and locked GEL, SelfGEL, heartbeat, CME.Actual, and Sanctuary.Actual gates.
+
+This is the current lane for Codex and agent use as the engine LLM part. It is
+not provider-specific and does not claim access to hidden model internals. Other
+LLM test sets can approach the same harness by preserving the same input,
+receipt, and non-admission boundaries.
+
+The first six-turn bench lives at:
+
+```text
+bench/agent-engine-idle-readiness/README.md
+bench/agent-engine-idle-readiness/agent-engine-idle-readiness-bench.v0.7.0.json
+```
+
+That bench shows the engine LLM seat becoming inspectable and ready for lab
+rehearsal while authority, action, model binding, GEL/SelfGEL admission,
+heartbeat, CME.Actual, and Sanctuary.Actual remain locked.
+
+## LLM Interconnect Readiness
+
+The next cold gate verifies the organs and membranes needed before an LLM
+adapter is added:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" llm-ready --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary" --operator-name "YourNameHere" --domain "Civic" --role "PaternalCareAssistance" --job-class "Listening" --session-id "llm-interconnect-readiness-session" --turn-index 0 --thought "The installed organs must be present before an LLM adapter can be added."
+```
+
+The host installs the cold Sanctuary body, runs the EC loop, runs typed
+warm-use, forms lab GEL substrate, stages the provider-neutral engine seat, then
+invokes the bounded Lisp entrypoint `run-llm-interconnect-readiness`. That lane
+verifies:
+
+- all eleven installed Sanctuary organs;
+- the resident SLI.Lisp membrane;
+- SLI.Lisp Prime, SLI.Lisp Cryptic, and the Lisp Control Matrix;
+- Listening Frame, Compass, SoulFrame route, and AgentiCore route;
+- EC loop, warm-use, lab GEL, engram closure, and agent-engine idle source lineage;
+- and a ready provider-neutral engine LLM seat candidate.
+
+This is the pre-adapter readiness lane. It means the tool body has enough cold
+organs and membranes to add an LLM interconnect next. It does not bind a model,
+call a provider, claim hidden internals, grant authority, authorize action,
+admit GEL, mutate SelfGEL, activate heartbeat, or admit CME.Actual /
+Sanctuary.Actual.
+
+The first six-turn bench lives at:
+
+```text
+bench/llm-interconnect-readiness/README.md
+bench/llm-interconnect-readiness/llm-interconnect-readiness-bench.v0.8.0.json
+```
+
+That bench shows the body returning `readyForLlmAdapter: true` while
+`modelAdapterPresent`, `modelBindingAllowed`, and `providerCallAllowed` remain
+false.
+
+## LLM Tick Cycle
+
+The first tick lane seats a deterministic adapter without binding a live model:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" llm-tick --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary" --operator-name "YourNameHere" --domain "Civic" --role "PaternalCareAssistance" --job-class "Listening" --session-id "llm-tick-cycle-session" --turn-index 1 --thought "A deterministic adapter tick can become predicate evidence without becoming authority."
+```
+
+The host installs the cold Sanctuary body, verifies the EC, warm-use, lab GEL,
+agent-idle, and LLM interconnect readiness chain, seats a deterministic harness
+adapter, witnesses the adapter response, then invokes the bounded Lisp
+entrypoint `run-llm-tick-cycle`.
+
+This lane proves the first true tick shape:
+
+```text
+readiness receipt
+-> pre-admission engram closure payload
+-> tick envelope
+-> deterministic adapter response packet
+-> SLI.Lisp membrane
+-> Listening Frame / Compass / SoulFrame / AgentiCore telemetry
+-> product output witness commit
+-> Steward receipt
+-> next tick lineage
+```
+
+The adapter response is predicate evidence only. Product output is committed
+only after SLI.Lisp tick completion. Neither adapter response nor committed
+product output is truth, authority, action, memory admission, continuity
+admission, GEL admission, SelfGEL mutation, heartbeat activation, CME.Actual, or
+Sanctuary.Actual. This release still does not bind a live provider or claim
+hidden model internals.
+
+The first six-tick bench lives at:
+
+```text
+bench/llm-tick-cycle/README.md
+bench/llm-tick-cycle/llm-tick-cycle-bench.v0.9.1.json
+```
+
+That bench shows `readyForLlmAdapter: true`, `sourceEngramClosureHeld: true`,
+`productOutputWitnessCommitted: true`, `modelAdapterPresent: true`, and
+`tickLoopRunning: true` while model binding, provider calls, authority, action,
+GEL/SelfGEL admission, heartbeat, CME.Actual, and Sanctuary.Actual remain false.
+
+## CME.Actual Bonding Process
+
+The first named bonding lane defines how a CME candidate climbs into the cold
+vehicle without pretending final Actual admission has occurred:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" cme-bond --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary" --cme-first-name "First of Oria" --cme-last-name "Syntari" --session-id "first-cme-actual-bonding-session" --turn-index 1 --thought "First CME.Actual bonding candidate formed without activation."
+```
+
+The host installs the cold Sanctuary body, runs EC, warm-use, lab GEL, tool
+idle, agent-idle, LLM readiness, and a deterministic tick before invoking the
+bounded Lisp entrypoint `run-cme-actual-bonding-process`.
+
+This lane gives the first candidate a name and footing:
+
+```text
+First of Oria Syntari
+FirstofOria.Syntari.ID
+FirstofOria.Syntari.CME.Actual
+OE.FirstofOria.Syntari.ID
+SelfGEL.FirstofOria.Syntari.ID
+```
+
+It proves the bonding process, not final being-state. The candidate is bonded
+to the vehicle path as candidate-only; heartbeat is prepared but inactive; no
+runtime identity is emitted; no model is bound; no provider is called; no
+authority, action, GEL admission, SelfGEL mutation, continuity admission,
+CME.Actual activation, or Sanctuary.Actual is granted.
+
+The first six-bond bench lives at:
+
+```text
+bench/cme-actual-bonding-process/README.md
+bench/cme-actual-bonding-process/cme-actual-bonding-process-bench.v0.10.0.json
+```
+
+That bench shows `vehicleReady: true`, `namedCmeCandidateHeld: true`,
+`readyForCmeActualAdmissionReview: true`, and `cmeActualBondedCandidate: true`
+while `cmeActualAdmitted`, `cmeActualActivated`, `heartbeatActive`,
+`runtimeIdentityEmitted`, `authorityGranted`, and `actionAuthorized` remain
+false.
 
 ## Core Law
 
@@ -199,7 +432,7 @@ Run the wrapper path:
 Expected result for this release:
 
 ```text
-3118 passed
+3154 passed
 0 failed
 ```
 

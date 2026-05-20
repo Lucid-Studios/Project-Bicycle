@@ -2,15 +2,19 @@
   "schemaVersion": 2,
   "versionOwner": "Directory.Build.props",
   "versionScheme": "ToolSemVer",
-  "currentVersion": "0.6.0",
-  "currentAssemblyVersion": "0.6.0.0",
-  "releaseTag": "v0.6.0-lab-gel-engrammitization",
+  "currentVersion": "0.10.0",
+  "currentAssemblyVersion": "0.10.0.0",
+  "releaseTag": "v0.10.0-cme-actual-bonding-process",
   "discipline": {
     "toolPackagesAreStandalone": true,
     "readmeBundled": true,
     "doctrineDocumentationBundled": false,
     "legacyLineFoldersBundled": false,
-    "releaseNotesLiveOutsidePayload": true
+    "releaseNotesLiveOutsidePayload": true,
+    "publicToolBodyFrozen": true,
+    "publicBuildLineDecoupled": true,
+    "publicFreezeManifest": "build/public-release-freeze.json",
+    "futureWorkRequiresDecoupledLine": true
   },
   "reasonCodes": {
     "major": "version-major-interface-break",

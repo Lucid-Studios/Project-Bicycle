@@ -58,6 +58,9 @@ public sealed class SanctuaryLabGelEngrammitizationServiceTests
         Assert.True(receipt.CoolingReceipt?.IsColdCoolingReceipt);
         Assert.True(receipt.PreAdmissionReview?.IsColdPreAdmissionReview);
         Assert.True(receipt.ReadbackReceipt?.IsColdReadback);
+        Assert.True(receipt.EngramClosure?.IsColdEngramClosure);
+        Assert.True(receipt.EngramClosureFormed);
+        Assert.True(receipt.EngramClosureReadyForEcPayload);
         Assert.True(receipt.CandidateRetainedAsLabSubstrate);
         Assert.False(receipt.LabGelAdmitted);
         Assert.False(receipt.EngramAdmitted);
@@ -263,6 +266,19 @@ public sealed class SanctuaryLabGelEngrammitizationServiceTests
                 PreAdmissionReviewRequired: true,
                 LabGelReadbackAvailable: true,
                 LabGelReadbackPreAdmissionOnly: true,
+                EngramClosureFormed: true,
+                EngramClosurePreAdmissionOnly: true,
+                EngramClosureLabSubstrateOnly: true,
+                EngramClosureWitnessed: true,
+                EngramClosureSealed: true,
+                EngramClosureReadyForEcPayload: true,
+                EngramClosureAdmitsGel: false,
+                EngramClosureAdmitsEngram: false,
+                EngramClosureAdmitsMemory: false,
+                EngramClosureMutatesSelfGel: false,
+                EngramClosureAdmitsContinuity: false,
+                EngramClosureGrantsAuthority: false,
+                EngramClosureAuthorizesAction: false,
                 TypedScopeAccepted: true,
                 SourceWarmUseAcceptedCold: true,
                 SessionLineageWitnessed: true,

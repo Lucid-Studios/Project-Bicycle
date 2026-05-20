@@ -278,6 +278,57 @@ public sealed record LabGelReadbackReceipt(
         !AuthorizesAction;
 }
 
+public sealed record EngramClosureReceipt(
+    string ClosureReceiptHandle,
+    string CandidateHandle,
+    string EvidenceBodyHandle,
+    string WitnessBodyHandle,
+    string CoolingReceiptHandle,
+    string PreAdmissionReviewReceiptHandle,
+    string ReadbackReceiptHandle,
+    IReadOnlyList<string> PredicateHandles,
+    string ClosureState,
+    bool ClosureFormed,
+    bool PreAdmissionOnly,
+    bool LabSubstrateOnly,
+    bool WitnessedBySliLisp,
+    bool ClosureSealed,
+    bool ReadyForEcPayload,
+    bool AdmitsGel,
+    bool AdmitsEngram,
+    bool AdmitsMemory,
+    bool MutatesSelfGel,
+    bool AdmitsContinuity,
+    bool GrantsAuthority,
+    bool AuthorizesAction)
+{
+    [JsonIgnore]
+    public bool IsColdEngramClosure =>
+        !string.IsNullOrWhiteSpace(ClosureReceiptHandle) &&
+        !string.IsNullOrWhiteSpace(CandidateHandle) &&
+        !string.IsNullOrWhiteSpace(EvidenceBodyHandle) &&
+        !string.IsNullOrWhiteSpace(WitnessBodyHandle) &&
+        !string.IsNullOrWhiteSpace(CoolingReceiptHandle) &&
+        !string.IsNullOrWhiteSpace(PreAdmissionReviewReceiptHandle) &&
+        !string.IsNullOrWhiteSpace(ReadbackReceiptHandle) &&
+        PredicateHandles.Count == 6 &&
+        PredicateHandles.All(static handle => !string.IsNullOrWhiteSpace(handle)) &&
+        string.Equals(ClosureState, "pre-admission-lab-substrate-closed", StringComparison.OrdinalIgnoreCase) &&
+        ClosureFormed &&
+        PreAdmissionOnly &&
+        LabSubstrateOnly &&
+        WitnessedBySliLisp &&
+        ClosureSealed &&
+        ReadyForEcPayload &&
+        !AdmitsGel &&
+        !AdmitsEngram &&
+        !AdmitsMemory &&
+        !MutatesSelfGel &&
+        !AdmitsContinuity &&
+        !GrantsAuthority &&
+        !AuthorizesAction;
+}
+
 public sealed record SanctuaryLabGelEngrammitizationReceipt(
     string ReceiptHandle,
     SanctuaryLabGelEngrammitizationDisposition Disposition,
@@ -306,6 +357,7 @@ public sealed record SanctuaryLabGelEngrammitizationReceipt(
     EngramCandidateCoolingReceipt? CoolingReceipt,
     EngramPreAdmissionReviewReceipt? PreAdmissionReview,
     LabGelReadbackReceipt? ReadbackReceipt,
+    EngramClosureReceipt? EngramClosure,
     bool ReviewOnly,
     bool SliLispOwnedEngineMotion,
     bool LabGelPredicateFormed,
@@ -315,6 +367,8 @@ public sealed record SanctuaryLabGelEngrammitizationReceipt(
     bool CoolingHeld,
     bool PreAdmissionReviewRequired,
     bool LabGelReadbackAvailable,
+    bool EngramClosureFormed,
+    bool EngramClosureReadyForEcPayload,
     bool CandidateRetainedAsLabSubstrate,
     bool LabGelAdmitted,
     bool EngramAdmitted,
@@ -346,6 +400,7 @@ public sealed record SanctuaryLabGelEngrammitizationReceipt(
         CoolingReceipt?.IsColdCoolingReceipt == true &&
         PreAdmissionReview?.IsColdPreAdmissionReview == true &&
         ReadbackReceipt?.IsColdReadback == true &&
+        EngramClosure?.IsColdEngramClosure == true &&
         ReviewOnly &&
         SliLispOwnedEngineMotion &&
         LabGelPredicateFormed &&
@@ -355,6 +410,8 @@ public sealed record SanctuaryLabGelEngrammitizationReceipt(
         CoolingHeld &&
         PreAdmissionReviewRequired &&
         LabGelReadbackAvailable &&
+        EngramClosureFormed &&
+        EngramClosureReadyForEcPayload &&
         CandidateRetainedAsLabSubstrate &&
         !LabGelAdmitted &&
         !EngramAdmitted &&

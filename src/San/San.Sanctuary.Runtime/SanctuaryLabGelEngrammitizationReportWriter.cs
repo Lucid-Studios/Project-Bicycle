@@ -48,6 +48,8 @@ public static class SanctuaryLabGelEngrammitizationReportWriter
         builder.AppendLine($"- Cooling held: `{receipt.CoolingHeld}`");
         builder.AppendLine($"- Pre-admission review required: `{receipt.PreAdmissionReviewRequired}`");
         builder.AppendLine($"- Lab GEL readback available: `{receipt.LabGelReadbackAvailable}`");
+        builder.AppendLine($"- Engram closure formed: `{receipt.EngramClosureFormed}`");
+        builder.AppendLine($"- Engram closure ready for EC payload: `{receipt.EngramClosureReadyForEcPayload}`");
         builder.AppendLine($"- Candidate retained as lab substrate: `{receipt.CandidateRetainedAsLabSubstrate}`");
         builder.AppendLine();
         builder.AppendLine("## Predicates");

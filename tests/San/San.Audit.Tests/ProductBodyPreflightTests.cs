@@ -16,10 +16,16 @@ public sealed class ProductBodyPreflightTests
         Assert.Equal(ProductBodyPreflightDisposition.VerifiedCold, status.Disposition);
         Assert.Equal("cold-product-body-preflight-verified", status.OutcomeCode);
         Assert.Equal("Project Bicycle", status.Manifest!.LineName);
-        Assert.Equal("0.6.0", status.Manifest.LineVersion);
+        Assert.Equal("0.10.0", status.Manifest.LineVersion);
         Assert.Equal("standalone-tool-body", status.Manifest.Posture);
         Assert.Equal("", status.Manifest.ParentLine);
         Assert.Equal("Project Bicycle", status.Manifest.ActiveExecutableTruth);
+        Assert.True(status.Manifest.PublicToolBodyFrozen);
+        Assert.Equal("0.10.0", status.Manifest.PublicFreezeVersion);
+        Assert.True(status.Manifest.PublicBuildLineDecoupled);
+        Assert.Equal("build/public-release-freeze.json", status.Manifest.PublicFreezeReceiptPath);
+        Assert.Equal("frozen-build-test-review-only", status.Manifest.NextPublicLinePosture);
+        Assert.Equal("decoupled-lab-cme-actual-admission-review", status.Manifest.NextPrivateLinePosture);
         Assert.False(status.RetainedParentPreserved);
         Assert.False(status.SidecarPreserved);
         Assert.True(status.Buildable);
@@ -98,6 +104,9 @@ public sealed class ProductBodyPreflightTests
         Assert.DoesNotContain("Active executable truth", markdown, StringComparison.Ordinal);
         Assert.DoesNotContain("current runnable truth", markdown, StringComparison.Ordinal);
         Assert.Contains("Activation refused: `True`", markdown, StringComparison.Ordinal);
+        Assert.Contains("Public tool body frozen: `True`", markdown, StringComparison.Ordinal);
+        Assert.Contains("Public build line decoupled: `True`", markdown, StringComparison.Ordinal);
+        Assert.Contains("Next private line posture: `decoupled-lab-cme-actual-admission-review`", markdown, StringComparison.Ordinal);
         Assert.Contains("CME.Actual allowed: `False`", markdown, StringComparison.Ordinal);
         Assert.Contains("Sanctuary.Actual allowed: `False`", markdown, StringComparison.Ordinal);
     }

@@ -59,7 +59,13 @@ public sealed record LineManifestSummary(
     string ActiveExecutableTruth,
     bool Buildable,
     bool SourceMaterialized,
-    bool RuntimeMaterialized);
+    bool RuntimeMaterialized,
+    bool PublicToolBodyFrozen,
+    string PublicFreezeVersion,
+    bool PublicBuildLineDecoupled,
+    string PublicFreezeReceiptPath,
+    string NextPublicLinePosture,
+    string NextPrivateLinePosture);
 
 public sealed record ProductBodyCheck(
     string CheckId,

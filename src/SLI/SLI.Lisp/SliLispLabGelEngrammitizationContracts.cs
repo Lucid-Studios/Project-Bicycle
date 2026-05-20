@@ -70,6 +70,19 @@ public sealed record SliLispLabGelEngrammitizationReceipt(
     bool PreAdmissionReviewRequired,
     bool LabGelReadbackAvailable,
     bool LabGelReadbackPreAdmissionOnly,
+    bool EngramClosureFormed,
+    bool EngramClosurePreAdmissionOnly,
+    bool EngramClosureLabSubstrateOnly,
+    bool EngramClosureWitnessed,
+    bool EngramClosureSealed,
+    bool EngramClosureReadyForEcPayload,
+    bool EngramClosureAdmitsGel,
+    bool EngramClosureAdmitsEngram,
+    bool EngramClosureAdmitsMemory,
+    bool EngramClosureMutatesSelfGel,
+    bool EngramClosureAdmitsContinuity,
+    bool EngramClosureGrantsAuthority,
+    bool EngramClosureAuthorizesAction,
     bool TypedScopeAccepted,
     bool SourceWarmUseAcceptedCold,
     bool SessionLineageWitnessed,
@@ -118,6 +131,19 @@ public sealed record SliLispLabGelEngrammitizationReceipt(
         PreAdmissionReviewRequired &&
         LabGelReadbackAvailable &&
         LabGelReadbackPreAdmissionOnly &&
+        EngramClosureFormed &&
+        EngramClosurePreAdmissionOnly &&
+        EngramClosureLabSubstrateOnly &&
+        EngramClosureWitnessed &&
+        EngramClosureSealed &&
+        EngramClosureReadyForEcPayload &&
+        !EngramClosureAdmitsGel &&
+        !EngramClosureAdmitsEngram &&
+        !EngramClosureAdmitsMemory &&
+        !EngramClosureMutatesSelfGel &&
+        !EngramClosureAdmitsContinuity &&
+        !EngramClosureGrantsAuthority &&
+        !EngramClosureAuthorizesAction &&
         TypedScopeAccepted &&
         SourceWarmUseAcceptedCold &&
         SessionLineageWitnessed &&

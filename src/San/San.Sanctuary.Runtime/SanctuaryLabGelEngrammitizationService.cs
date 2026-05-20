@@ -292,6 +292,38 @@ public sealed class DefaultSanctuaryLabGelEngrammitizationService : ISanctuaryLa
                 GrantsAuthority: false,
                 AuthorizesAction: false)
             : null;
+        var closure = completed &&
+            candidate is not null &&
+            evidenceBody is not null &&
+            witnessBody is not null &&
+            cooling is not null &&
+            review is not null &&
+            readback is not null &&
+            sliLispLabGelReceipt?.EngramClosureFormed == true
+                ? new EngramClosureReceipt(
+                    ClosureReceiptHandle: $"urn:san:engram-closure:{ShortHash(candidate.CandidateHandle, "closure")}",
+                    CandidateHandle: candidate.CandidateHandle,
+                    EvidenceBodyHandle: evidenceBody.EvidenceBodyHandle,
+                    WitnessBodyHandle: witnessBody.WitnessBodyHandle,
+                    CoolingReceiptHandle: cooling.CoolingReceiptHandle,
+                    PreAdmissionReviewReceiptHandle: review.ReviewReceiptHandle,
+                    ReadbackReceiptHandle: readback.ReadbackReceiptHandle,
+                    PredicateHandles: predicateHandles,
+                    ClosureState: "pre-admission-lab-substrate-closed",
+                    ClosureFormed: true,
+                    PreAdmissionOnly: sliLispLabGelReceipt.EngramClosurePreAdmissionOnly,
+                    LabSubstrateOnly: sliLispLabGelReceipt.EngramClosureLabSubstrateOnly,
+                    WitnessedBySliLisp: sliLispLabGelReceipt.EngramClosureWitnessed,
+                    ClosureSealed: sliLispLabGelReceipt.EngramClosureSealed,
+                    ReadyForEcPayload: sliLispLabGelReceipt.EngramClosureReadyForEcPayload,
+                    AdmitsGel: sliLispLabGelReceipt.EngramClosureAdmitsGel,
+                    AdmitsEngram: sliLispLabGelReceipt.EngramClosureAdmitsEngram,
+                    AdmitsMemory: sliLispLabGelReceipt.EngramClosureAdmitsMemory,
+                    MutatesSelfGel: sliLispLabGelReceipt.EngramClosureMutatesSelfGel,
+                    AdmitsContinuity: sliLispLabGelReceipt.EngramClosureAdmitsContinuity,
+                    GrantsAuthority: sliLispLabGelReceipt.EngramClosureGrantsAuthority,
+                    AuthorizesAction: sliLispLabGelReceipt.EngramClosureAuthorizesAction)
+                : null;
 
         return new SanctuaryLabGelEngrammitizationReceipt(
             ReceiptHandle: $"urn:san:lab-gel-engrammitization:{ShortHash(sourceWarmUseReceiptHandle, sessionId, turnIndex.ToString(System.Globalization.CultureInfo.InvariantCulture), outcomeCode)}",
@@ -321,6 +353,7 @@ public sealed class DefaultSanctuaryLabGelEngrammitizationService : ISanctuaryLa
             CoolingReceipt: cooling,
             PreAdmissionReview: review,
             ReadbackReceipt: readback,
+            EngramClosure: closure,
             ReviewOnly: true,
             SliLispOwnedEngineMotion: sliLispLabGelReceipt?.IsLabGelPreAdmissionEngrammitization == true,
             LabGelPredicateFormed: completed,
@@ -330,6 +363,8 @@ public sealed class DefaultSanctuaryLabGelEngrammitizationService : ISanctuaryLa
             CoolingHeld: completed,
             PreAdmissionReviewRequired: completed,
             LabGelReadbackAvailable: completed,
+            EngramClosureFormed: closure?.IsColdEngramClosure == true,
+            EngramClosureReadyForEcPayload: closure?.ReadyForEcPayload == true,
             CandidateRetainedAsLabSubstrate: completed,
             LabGelAdmitted: false,
             EngramAdmitted: false,

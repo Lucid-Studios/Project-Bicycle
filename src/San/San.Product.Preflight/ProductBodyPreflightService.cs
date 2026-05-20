@@ -252,7 +252,13 @@ public sealed class DefaultProductBodyPreflightService : IProductBodyPreflightSe
                 ActiveExecutableTruth: ReadString(root, "activeExecutableTruth"),
                 Buildable: ReadBool(root, "buildable"),
                 SourceMaterialized: ReadBool(root, "sourceMaterialized"),
-                RuntimeMaterialized: ReadBool(root, "runtimeMaterialized"));
+                RuntimeMaterialized: ReadBool(root, "runtimeMaterialized"),
+                PublicToolBodyFrozen: ReadBool(root, "publicToolBodyFrozen"),
+                PublicFreezeVersion: ReadString(root, "publicFreezeVersion"),
+                PublicBuildLineDecoupled: ReadBool(root, "publicBuildLineDecoupled"),
+                PublicFreezeReceiptPath: ReadString(root, "publicFreezeReceiptPath"),
+                NextPublicLinePosture: ReadString(root, "nextPublicLinePosture"),
+                NextPrivateLinePosture: ReadString(root, "nextPrivateLinePosture"));
 
             checks.Add(new ProductBodyCheck(
                 "line-manifest-present",

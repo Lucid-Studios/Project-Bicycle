@@ -143,9 +143,13 @@ public sealed class BikeInMotionTests
         var root = manifest.RootElement;
         var notes = root.GetProperty("notes").EnumerateArray().Select(static note => note.GetString() ?? string.Empty).ToArray();
 
-        Assert.Equal("0.6.0", root.GetProperty("lineVersion").GetString());
+        Assert.Equal("0.10.0", root.GetProperty("lineVersion").GetString());
         Assert.True(root.GetProperty("typedWarmUseRehearsalMaterialized").GetBoolean());
         Assert.True(root.GetProperty("labGelEngrammitizationMaterialized").GetBoolean());
+        Assert.True(root.GetProperty("toolBodyIdleStateMaterialized").GetBoolean());
+        Assert.True(root.GetProperty("agentEngineIdleReadinessMaterialized").GetBoolean());
+        Assert.True(root.GetProperty("llmInterconnectReadinessMaterialized").GetBoolean());
+        Assert.True(root.GetProperty("cmeActualBondingProcessMaterialized").GetBoolean());
         Assert.Contains(notes, note => note.Contains("standalone root-level tool package", StringComparison.Ordinal));
         Assert.Contains(notes, note => note.Contains("Typed warm-use rehearsal is materialized", StringComparison.Ordinal));
         Assert.Contains(notes, note => note.Contains("excludes doctrine docs and legacy line folders", StringComparison.Ordinal));

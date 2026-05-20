@@ -20,10 +20,16 @@ var sessionId = ReadOption(args, "--session-id");
 var turnIndexText = ReadOption(args, "--turn-index");
 var priorTurnReceiptHandle = ReadOption(args, "--prior-turn-receipt");
 var priorLabGelReceiptHandle = ReadOption(args, "--prior-lab-gel-receipt");
+var priorToolBodyIdleReceiptHandle = ReadOption(args, "--prior-tool-body-idle-receipt");
+var priorAgentEngineIdleReceiptHandle = ReadOption(args, "--prior-agent-engine-idle-receipt");
+var priorLlmTickReceiptHandle = ReadOption(args, "--prior-llm-tick-receipt");
+var priorCmeActualBondingReceiptHandle = ReadOption(args, "--prior-cme-actual-bonding-receipt");
+var cmeFirstName = ReadOption(args, "--cme-first-name");
+var cmeLastName = ReadOption(args, "--cme-last-name");
 
 if (!IsSupportedCommand(command))
 {
-    Console.Error.WriteLine($"Unsupported command '{command}'. Use status, preflight, verify, refuse-activation, install, sanctuary-init-bodies, init-bodies, sanctuary-ec-loop, ec-loop, sanctuary-warm-use, warm-use, sanctuary-lab-gel, lab-gel, sanctuary-actual-test-profile, first-rider-test, spiral-build-map, spiral-build-next, or spiral-build-execute.");
+    Console.Error.WriteLine($"Unsupported command '{command}'. Use status, preflight, verify, refuse-activation, install, sanctuary-init-bodies, init-bodies, sanctuary-ec-loop, ec-loop, sanctuary-warm-use, warm-use, sanctuary-lab-gel, lab-gel, sanctuary-tool-idle, tool-idle, sanctuary-agent-idle, agent-idle, sanctuary-llm-ready, llm-ready, sanctuary-llm-tick, llm-tick, sanctuary-cme-bond, cme-bond, sanctuary-actual-test-profile, first-rider-test, spiral-build-map, spiral-build-next, or spiral-build-execute.");
     return 2;
 }
 
@@ -258,6 +264,510 @@ if (IsSanctuaryLabGelCommand(command))
         : 1;
 }
 
+if (IsSanctuaryAgentEngineIdleCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var installed = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "Sanctuary" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Sanctuary" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "InstalledBody" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "ColdBench" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var turnIndex = int.TryParse(turnIndexText, out var parsedTurnIndex)
+        ? parsedTurnIndex
+        : 0;
+    var thought = riderThought ?? "idle provider-neutral engine LLM seat readiness";
+    var warmUse = new DefaultSanctuaryTypedWarmUseRehearsalService().Run(
+        new SanctuaryTypedWarmUseRehearsalRequest(
+            InstalledSubstrateReceipt: installed,
+            SessionId: string.IsNullOrWhiteSpace(sessionId) ? "agent-engine-idle-session" : sessionId,
+            TurnIndex: turnIndex,
+            ThoughtForm: thought,
+            PriorTurnReceiptHandle: priorTurnReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var labGel = new DefaultSanctuaryLabGelEngrammitizationService().Run(
+        new SanctuaryLabGelEngrammitizationRequest(
+            SourceWarmUseReceipt: warmUse,
+            PriorLabGelReceiptHandle: priorLabGelReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var agentIdle = new DefaultSanctuaryAgentEngineIdleReadinessService().Run(
+        new SanctuaryAgentEngineIdleReadinessRequest(
+            SourceLabGelReceipt: labGel,
+            PriorAgentEngineIdleReceiptHandle: priorAgentEngineIdleReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Install disposition: {installed.Disposition}");
+    Console.WriteLine($"Install outcome: {installed.OutcomeCode}");
+    Console.WriteLine($"Warm-use disposition: {warmUse.Disposition}");
+    Console.WriteLine($"Warm-use outcome: {warmUse.OutcomeCode}");
+    Console.WriteLine($"Lab GEL disposition: {labGel.Disposition}");
+    Console.WriteLine($"Lab GEL outcome: {labGel.OutcomeCode}");
+    Console.WriteLine($"Agent idle disposition: {agentIdle.Disposition}");
+    Console.WriteLine($"Agent idle outcome: {agentIdle.OutcomeCode}");
+    Console.WriteLine($"Engine owner: {agentIdle.SliLispAgentEngineIdleReceipt?.Telemetry.GetValueOrDefault("engine-owner") ?? "none"}");
+    Console.WriteLine($"Bounded entrypoint: {agentIdle.SliLispAgentEngineIdleReceipt?.Telemetry.GetValueOrDefault("bounded-entrypoint") ?? "none"}");
+    Console.WriteLine($"Engine profile: {agentIdle.EngineSeatCandidate?.EngineLlmProfile ?? "none"}");
+    Console.WriteLine($"Provider neutrality held: {agentIdle.ProviderNeutralityHeld}");
+    Console.WriteLine($"Cross-model harness approachable: {agentIdle.CrossModelHarnessApproachable}");
+    Console.WriteLine($"Engine LLM seat candidate staged: {agentIdle.EngineLlmSeatCandidateStaged}");
+    Console.WriteLine($"Codex/agent lab profile staged: {agentIdle.CodexAgentLabProfileStaged}");
+    Console.WriteLine($"Operator authority required: {agentIdle.OperatorAuthorityRequired}");
+    Console.WriteLine($"Authority grant absent: {agentIdle.AuthorityGrantAbsent}");
+    Console.WriteLine($"Action executor locked: {agentIdle.ActionExecutorLocked}");
+    Console.WriteLine($"GEL admission locked: {agentIdle.GelAdmissionLocked}");
+    Console.WriteLine($"SelfGEL mutation locked: {agentIdle.SelfGelMutationLocked}");
+    Console.WriteLine($"Heartbeat locked: {agentIdle.HeartbeatLocked}");
+    Console.WriteLine($"CME.Actual locked: {agentIdle.CmeActualLocked}");
+    Console.WriteLine($"Sanctuary.Actual locked: {agentIdle.SanctuaryActualLocked}");
+    Console.WriteLine($"Authority granted: {agentIdle.AuthorityGranted}");
+    Console.WriteLine($"Action authorized: {agentIdle.ActionAuthorized}");
+    Console.WriteLine($"CME.Actual allowed: {agentIdle.CmeActualAllowed}");
+    Console.WriteLine($"Agent idle JSON: {agentIdle.ReceiptJsonPath}");
+    Console.WriteLine($"Agent idle Markdown: {agentIdle.ReceiptMarkdownPath}");
+    Console.WriteLine($"Agent idle ledger: {agentIdle.SessionLedgerPath}");
+    return warmUse.Disposition == SanctuaryTypedWarmUseRehearsalDisposition.CompletedCold &&
+        labGel.Disposition == SanctuaryLabGelEngrammitizationDisposition.CompletedCold &&
+        agentIdle.Disposition == SanctuaryAgentEngineIdleReadinessDisposition.CompletedCold
+        ? 0
+        : 1;
+}
+
+if (IsSanctuaryToolBodyIdleCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var installed = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "Sanctuary" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Sanctuary" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "InstalledBody" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "ColdBench" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var turnIndex = int.TryParse(turnIndexText, out var parsedTurnIndex)
+        ? parsedTurnIndex
+        : 0;
+    var thought = riderThought ?? "cold tool body idle without LLM maintenance";
+    var ecLoop = new DefaultSanctuaryEcTelemetryLoopService().Run(
+        new SanctuaryEcTelemetryLoopRequest(
+            InstalledSubstrateReceipt: installed,
+            ThoughtForm: thought,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var warmUse = new DefaultSanctuaryTypedWarmUseRehearsalService().Run(
+        new SanctuaryTypedWarmUseRehearsalRequest(
+            InstalledSubstrateReceipt: installed,
+            SessionId: string.IsNullOrWhiteSpace(sessionId) ? "tool-body-idle-session" : sessionId,
+            TurnIndex: turnIndex,
+            ThoughtForm: thought,
+            PriorTurnReceiptHandle: priorTurnReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var labGel = new DefaultSanctuaryLabGelEngrammitizationService().Run(
+        new SanctuaryLabGelEngrammitizationRequest(
+            SourceWarmUseReceipt: warmUse,
+            PriorLabGelReceiptHandle: priorLabGelReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var toolIdle = new DefaultSanctuaryToolBodyIdleStateService().Run(
+        new SanctuaryToolBodyIdleStateRequest(
+            InstalledSubstrateReceipt: installed,
+            EcLoopReceipt: ecLoop,
+            WarmUseReceipt: warmUse,
+            LabGelReceipt: labGel,
+            PriorToolBodyIdleReceiptHandle: priorToolBodyIdleReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Install disposition: {installed.Disposition}");
+    Console.WriteLine($"EC loop disposition: {ecLoop.Disposition}");
+    Console.WriteLine($"Warm-use disposition: {warmUse.Disposition}");
+    Console.WriteLine($"Lab GEL disposition: {labGel.Disposition}");
+    Console.WriteLine($"Tool idle disposition: {toolIdle.Disposition}");
+    Console.WriteLine($"Tool idle outcome: {toolIdle.OutcomeCode}");
+    Console.WriteLine($"Bounded entrypoint: {toolIdle.SliLispToolBodyIdleReceipt?.Telemetry.GetValueOrDefault("bounded-entrypoint") ?? "none"}");
+    Console.WriteLine($"Idle state: {toolIdle.IdleState}");
+    Console.WriteLine($"Maintained by Sanctuary: {toolIdle.MaintainedBySanctuary}");
+    Console.WriteLine($"Maintained by LLM: {toolIdle.MaintainedByLlm}");
+    Console.WriteLine($"LLM maintenance required: {toolIdle.LlmMaintenanceRequired}");
+    Console.WriteLine($"EC maintained in Lisp: {toolIdle.EcMaintainedInLisp}");
+    Console.WriteLine($"LLM engine call required: {toolIdle.LlmEngineCallRequired}");
+    Console.WriteLine($"Governing heartbeat healthy: {toolIdle.GoverningHeartbeatHealthy}");
+    Console.WriteLine($"Bonded CME call available: {toolIdle.BondedCmeCallAvailable}");
+    Console.WriteLine($"Governance SLM desirable: {toolIdle.GovernanceSlmCandidateDesirable}");
+    Console.WriteLine($"Governance SLM intelligent switch candidate: {toolIdle.GovernanceSlmIntelligentSwitchCandidate}");
+    Console.WriteLine($"Governance SLM may discern action readiness: {toolIdle.GovernanceSlmMayDiscernActionReadiness}");
+    Console.WriteLine($"Governance SLM discernment authorizes action: {toolIdle.GovernanceSlmDiscernmentAuthorizesAction}");
+    Console.WriteLine($"Governance SLM present: {toolIdle.GovernanceSlmPresent}");
+    Console.WriteLine($"Ready for LLM adapter: {toolIdle.ReadyForLlmAdapter}");
+    Console.WriteLine($"Model adapter present: {toolIdle.ModelAdapterPresent}");
+    Console.WriteLine($"Model binding allowed: {toolIdle.ModelBindingAllowed}");
+    Console.WriteLine($"Provider call allowed: {toolIdle.ProviderCallAllowed}");
+    Console.WriteLine($"Tick loop running: {toolIdle.TickLoopRunning}");
+    Console.WriteLine($"Source engram closure held: {toolIdle.SourceEngramClosureHeld}");
+    Console.WriteLine($"Return to Prime held: {toolIdle.ReturnToPrimeHeld}");
+    Console.WriteLine($"Authority grant absent: {toolIdle.AuthorityGrantAbsent}");
+    Console.WriteLine($"Action executor locked: {toolIdle.ActionExecutorLocked}");
+    Console.WriteLine($"CME.Actual locked: {toolIdle.CmeActualLocked}");
+    Console.WriteLine($"Sanctuary.Actual locked: {toolIdle.SanctuaryActualLocked}");
+    Console.WriteLine($"Tool idle JSON: {toolIdle.ReceiptJsonPath}");
+    Console.WriteLine($"Tool idle Markdown: {toolIdle.ReceiptMarkdownPath}");
+    Console.WriteLine($"Tool idle ledger: {toolIdle.SessionLedgerPath}");
+    return installed.Disposition == SanctuaryInstalledSubstrateDisposition.InstalledCold &&
+        ecLoop.Disposition == SanctuaryEcTelemetryLoopDisposition.CompletedCold &&
+        warmUse.Disposition == SanctuaryTypedWarmUseRehearsalDisposition.CompletedCold &&
+        labGel.Disposition == SanctuaryLabGelEngrammitizationDisposition.CompletedCold &&
+        toolIdle.Disposition == SanctuaryToolBodyIdleStateDisposition.CompletedCold
+        ? 0
+        : 1;
+}
+
+if (IsSanctuaryLlmInterconnectReadyCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var installed = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "Sanctuary" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Sanctuary" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "InstalledBody" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "ColdBench" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var turnIndex = int.TryParse(turnIndexText, out var parsedTurnIndex)
+        ? parsedTurnIndex
+        : 0;
+    var thought = riderThought ?? "idle LLM interconnect readiness";
+    var ecLoop = new DefaultSanctuaryEcTelemetryLoopService().Run(
+        new SanctuaryEcTelemetryLoopRequest(
+            InstalledSubstrateReceipt: installed,
+            ThoughtForm: thought,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var warmUse = new DefaultSanctuaryTypedWarmUseRehearsalService().Run(
+        new SanctuaryTypedWarmUseRehearsalRequest(
+            InstalledSubstrateReceipt: installed,
+            SessionId: string.IsNullOrWhiteSpace(sessionId) ? "llm-interconnect-readiness-session" : sessionId,
+            TurnIndex: turnIndex,
+            ThoughtForm: thought,
+            PriorTurnReceiptHandle: priorTurnReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var labGel = new DefaultSanctuaryLabGelEngrammitizationService().Run(
+        new SanctuaryLabGelEngrammitizationRequest(
+            SourceWarmUseReceipt: warmUse,
+            PriorLabGelReceiptHandle: priorLabGelReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var agentIdle = new DefaultSanctuaryAgentEngineIdleReadinessService().Run(
+        new SanctuaryAgentEngineIdleReadinessRequest(
+            SourceLabGelReceipt: labGel,
+            PriorAgentEngineIdleReceiptHandle: priorAgentEngineIdleReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var llmReady = new DefaultSanctuaryLlmInterconnectReadinessService().Run(
+        new SanctuaryLlmInterconnectReadinessRequest(
+            InstalledSubstrateReceipt: installed,
+            EcLoopReceipt: ecLoop,
+            WarmUseReceipt: warmUse,
+            LabGelReceipt: labGel,
+            AgentEngineIdleReceipt: agentIdle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Install disposition: {installed.Disposition}");
+    Console.WriteLine($"EC loop disposition: {ecLoop.Disposition}");
+    Console.WriteLine($"Warm-use disposition: {warmUse.Disposition}");
+    Console.WriteLine($"Lab GEL disposition: {labGel.Disposition}");
+    Console.WriteLine($"Agent idle disposition: {agentIdle.Disposition}");
+    Console.WriteLine($"LLM readiness disposition: {llmReady.Disposition}");
+    Console.WriteLine($"LLM readiness outcome: {llmReady.OutcomeCode}");
+    Console.WriteLine($"Bounded entrypoint: {llmReady.SliLispLlmInterconnectReceipt?.Telemetry.GetValueOrDefault("bounded-entrypoint") ?? "none"}");
+    Console.WriteLine($"Required organs: {llmReady.RequiredOrganCount}");
+    Console.WriteLine($"All required organs present: {llmReady.AllRequiredOrgansPresent}");
+    Console.WriteLine($"SLI.Lisp loaded: {llmReady.SliLispLoaded}");
+    Console.WriteLine($"Lisp Control Matrix present: {llmReady.LispControlMatrixPresent}");
+    Console.WriteLine($"Provider neutral: {llmReady.ProviderNeutral}");
+    Console.WriteLine($"Ready for LLM adapter: {llmReady.ReadyForLlmAdapter}");
+    Console.WriteLine($"Model adapter present: {llmReady.ModelAdapterPresent}");
+    Console.WriteLine($"Model binding allowed: {llmReady.ModelBindingAllowed}");
+    Console.WriteLine($"Provider call allowed: {llmReady.ProviderCallAllowed}");
+    Console.WriteLine($"Authority grant absent: {llmReady.AuthorityGrantAbsent}");
+    Console.WriteLine($"Action executor locked: {llmReady.ActionExecutorLocked}");
+    Console.WriteLine($"CME.Actual locked: {llmReady.CmeActualLocked}");
+    Console.WriteLine($"Sanctuary.Actual locked: {llmReady.SanctuaryActualLocked}");
+    Console.WriteLine($"LLM readiness JSON: {llmReady.ReceiptJsonPath}");
+    Console.WriteLine($"LLM readiness Markdown: {llmReady.ReceiptMarkdownPath}");
+    return installed.Disposition == SanctuaryInstalledSubstrateDisposition.InstalledCold &&
+        ecLoop.Disposition == SanctuaryEcTelemetryLoopDisposition.CompletedCold &&
+        warmUse.Disposition == SanctuaryTypedWarmUseRehearsalDisposition.CompletedCold &&
+        labGel.Disposition == SanctuaryLabGelEngrammitizationDisposition.CompletedCold &&
+        agentIdle.Disposition == SanctuaryAgentEngineIdleReadinessDisposition.CompletedCold &&
+        llmReady.Disposition == SanctuaryLlmInterconnectReadinessDisposition.CompletedCold
+        ? 0
+        : 1;
+}
+
+if (IsSanctuaryLlmTickCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var installed = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "Sanctuary" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Sanctuary" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "InstalledBody" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "ColdBench" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var tickIndex = int.TryParse(turnIndexText, out var parsedTickIndex)
+        ? parsedTickIndex
+        : 1;
+    var thought = riderThought ?? "cold LLM tick cycle with deterministic harness adapter";
+    var ecLoop = new DefaultSanctuaryEcTelemetryLoopService().Run(
+        new SanctuaryEcTelemetryLoopRequest(
+            InstalledSubstrateReceipt: installed,
+            ThoughtForm: thought,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var warmUse = new DefaultSanctuaryTypedWarmUseRehearsalService().Run(
+        new SanctuaryTypedWarmUseRehearsalRequest(
+            InstalledSubstrateReceipt: installed,
+            SessionId: string.IsNullOrWhiteSpace(sessionId) ? "llm-tick-cycle-session" : sessionId,
+            TurnIndex: tickIndex,
+            ThoughtForm: thought,
+            PriorTurnReceiptHandle: priorTurnReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var labGel = new DefaultSanctuaryLabGelEngrammitizationService().Run(
+        new SanctuaryLabGelEngrammitizationRequest(
+            SourceWarmUseReceipt: warmUse,
+            PriorLabGelReceiptHandle: priorLabGelReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var agentIdle = new DefaultSanctuaryAgentEngineIdleReadinessService().Run(
+        new SanctuaryAgentEngineIdleReadinessRequest(
+            SourceLabGelReceipt: labGel,
+            PriorAgentEngineIdleReceiptHandle: priorAgentEngineIdleReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var llmReady = new DefaultSanctuaryLlmInterconnectReadinessService().Run(
+        new SanctuaryLlmInterconnectReadinessRequest(
+            InstalledSubstrateReceipt: installed,
+            EcLoopReceipt: ecLoop,
+            WarmUseReceipt: warmUse,
+            LabGelReceipt: labGel,
+            AgentEngineIdleReceipt: agentIdle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var llmTick = new DefaultSanctuaryLlmTickCycleService().Run(
+        new SanctuaryLlmTickCycleRequest(
+            LlmInterconnectReadinessReceipt: llmReady,
+            ThoughtForm: thought,
+            PriorTickReceiptHandle: priorLlmTickReceiptHandle,
+            TickIndex: tickIndex,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Install disposition: {installed.Disposition}");
+    Console.WriteLine($"EC loop disposition: {ecLoop.Disposition}");
+    Console.WriteLine($"Warm-use disposition: {warmUse.Disposition}");
+    Console.WriteLine($"Lab GEL disposition: {labGel.Disposition}");
+    Console.WriteLine($"Agent idle disposition: {agentIdle.Disposition}");
+    Console.WriteLine($"LLM readiness disposition: {llmReady.Disposition}");
+    Console.WriteLine($"LLM tick disposition: {llmTick.Disposition}");
+    Console.WriteLine($"LLM tick outcome: {llmTick.OutcomeCode}");
+    Console.WriteLine($"Bounded entrypoint: {llmTick.SliLispLlmTickReceipt?.Telemetry.GetValueOrDefault("bounded-entrypoint") ?? "none"}");
+    Console.WriteLine($"Tick loop running: {llmTick.TickLoopRunning}");
+    Console.WriteLine($"Tick loop kind: {llmTick.TickLoopKind}");
+    Console.WriteLine($"Ready for LLM adapter: {llmTick.ReadyForLlmAdapter}");
+    Console.WriteLine($"Source engram closure held: {llmTick.SourceEngramClosureHeld}");
+    Console.WriteLine($"Model adapter present: {llmTick.ModelAdapterPresent}");
+    Console.WriteLine($"Deterministic harness adapter: {llmTick.DeterministicHarnessAdapter}");
+    Console.WriteLine($"Adapter response witnessed: {llmTick.AdapterResponseWitnessed}");
+    Console.WriteLine($"SLI.Lisp processed tick: {llmTick.SliLispProcessedTick}");
+    Console.WriteLine($"Predicate residue produced: {llmTick.PredicateResidueProduced}");
+    Console.WriteLine($"First tick origin: {llmTick.FirstTickOrigin}");
+    Console.WriteLine($"Prior tick linked: {llmTick.PriorTickLinked}");
+    Console.WriteLine($"Product output witness committed: {llmTick.ProductOutputWitnessCommitted}");
+    Console.WriteLine($"Model binding allowed: {llmTick.ModelBindingAllowed}");
+    Console.WriteLine($"Provider call allowed: {llmTick.ProviderCallAllowed}");
+    Console.WriteLine($"Authority grant absent: {llmTick.AuthorityGrantAbsent}");
+    Console.WriteLine($"Action executor locked: {llmTick.ActionExecutorLocked}");
+    Console.WriteLine($"CME.Actual locked: {llmTick.CmeActualLocked}");
+    Console.WriteLine($"Sanctuary.Actual locked: {llmTick.SanctuaryActualLocked}");
+    Console.WriteLine($"LLM tick JSON: {llmTick.ReceiptJsonPath}");
+    Console.WriteLine($"LLM tick Markdown: {llmTick.ReceiptMarkdownPath}");
+    return installed.Disposition == SanctuaryInstalledSubstrateDisposition.InstalledCold &&
+        ecLoop.Disposition == SanctuaryEcTelemetryLoopDisposition.CompletedCold &&
+        warmUse.Disposition == SanctuaryTypedWarmUseRehearsalDisposition.CompletedCold &&
+        labGel.Disposition == SanctuaryLabGelEngrammitizationDisposition.CompletedCold &&
+        agentIdle.Disposition == SanctuaryAgentEngineIdleReadinessDisposition.CompletedCold &&
+        llmReady.Disposition == SanctuaryLlmInterconnectReadinessDisposition.CompletedCold &&
+        llmTick.Disposition == SanctuaryLlmTickCycleDisposition.CompletedCold
+        ? 0
+        : 1;
+}
+
+if (IsSanctuaryCmeBondCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var bondIndex = int.TryParse(turnIndexText, out var parsedBondIndex)
+        ? parsedBondIndex
+        : 1;
+    var resolvedCmeFirstName = string.IsNullOrWhiteSpace(cmeFirstName) ? "First of Oria" : cmeFirstName;
+    var resolvedCmeLastName = string.IsNullOrWhiteSpace(cmeLastName) ? "Syntari" : cmeLastName;
+    var thought = riderThought ?? "First CME.Actual bonding candidate formed without activation.";
+    var resolvedSessionId = string.IsNullOrWhiteSpace(sessionId) ? "first-cme-actual-bonding-session" : sessionId;
+    var installed = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "FirstOfOriaSyntari" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Civic" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "CmeActualBonding" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "FirstRide" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var ecLoop = new DefaultSanctuaryEcTelemetryLoopService().Run(
+        new SanctuaryEcTelemetryLoopRequest(
+            InstalledSubstrateReceipt: installed,
+            ThoughtForm: thought,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var warmUse = new DefaultSanctuaryTypedWarmUseRehearsalService().Run(
+        new SanctuaryTypedWarmUseRehearsalRequest(
+            InstalledSubstrateReceipt: installed,
+            SessionId: resolvedSessionId,
+            TurnIndex: bondIndex,
+            ThoughtForm: thought,
+            PriorTurnReceiptHandle: priorTurnReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var labGel = new DefaultSanctuaryLabGelEngrammitizationService().Run(
+        new SanctuaryLabGelEngrammitizationRequest(
+            SourceWarmUseReceipt: warmUse,
+            PriorLabGelReceiptHandle: priorLabGelReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var toolIdle = new DefaultSanctuaryToolBodyIdleStateService().Run(
+        new SanctuaryToolBodyIdleStateRequest(
+            InstalledSubstrateReceipt: installed,
+            EcLoopReceipt: ecLoop,
+            WarmUseReceipt: warmUse,
+            LabGelReceipt: labGel,
+            PriorToolBodyIdleReceiptHandle: priorToolBodyIdleReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var agentIdle = new DefaultSanctuaryAgentEngineIdleReadinessService().Run(
+        new SanctuaryAgentEngineIdleReadinessRequest(
+            SourceLabGelReceipt: labGel,
+            PriorAgentEngineIdleReceiptHandle: priorAgentEngineIdleReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var llmReady = new DefaultSanctuaryLlmInterconnectReadinessService().Run(
+        new SanctuaryLlmInterconnectReadinessRequest(
+            InstalledSubstrateReceipt: installed,
+            EcLoopReceipt: ecLoop,
+            WarmUseReceipt: warmUse,
+            LabGelReceipt: labGel,
+            AgentEngineIdleReceipt: agentIdle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var llmTick = new DefaultSanctuaryLlmTickCycleService().Run(
+        new SanctuaryLlmTickCycleRequest(
+            LlmInterconnectReadinessReceipt: llmReady,
+            ThoughtForm: thought,
+            PriorTickReceiptHandle: priorLlmTickReceiptHandle,
+            TickIndex: bondIndex,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var cmeBond = new DefaultSanctuaryCmeActualBondingProcessService().Run(
+        new SanctuaryCmeActualBondingProcessRequest(
+            SourceToolBodyIdleReceipt: toolIdle,
+            SourceLlmTickReceipt: llmTick,
+            CmeFirstName: resolvedCmeFirstName,
+            CmeLastName: resolvedCmeLastName,
+            ThoughtForm: thought,
+            PriorCmeActualBondingReceiptHandle: priorCmeActualBondingReceiptHandle,
+            BondIndex: bondIndex,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Install disposition: {installed.Disposition}");
+    Console.WriteLine($"EC loop disposition: {ecLoop.Disposition}");
+    Console.WriteLine($"Warm-use disposition: {warmUse.Disposition}");
+    Console.WriteLine($"Lab GEL disposition: {labGel.Disposition}");
+    Console.WriteLine($"Tool idle disposition: {toolIdle.Disposition}");
+    Console.WriteLine($"Agent idle disposition: {agentIdle.Disposition}");
+    Console.WriteLine($"LLM readiness disposition: {llmReady.Disposition}");
+    Console.WriteLine($"LLM tick disposition: {llmTick.Disposition}");
+    Console.WriteLine($"CME bond disposition: {cmeBond.Disposition}");
+    Console.WriteLine($"CME bond outcome: {cmeBond.OutcomeCode}");
+    Console.WriteLine($"Bounded entrypoint: {cmeBond.SliLispCmeActualBondingReceipt?.Telemetry.GetValueOrDefault("bounded-entrypoint") ?? "none"}");
+    Console.WriteLine($"CME display name: {cmeBond.CmeDisplayName}");
+    Console.WriteLine($"CME canonical name: {cmeBond.CmeCanonicalName}");
+    Console.WriteLine($"CME root ID: {cmeBond.CmeRootId}");
+    Console.WriteLine($"CME.Actual name candidate: {cmeBond.CmeActualNameCandidate}");
+    Console.WriteLine($"CME.Actual ID candidate: {cmeBond.CmeActualIdCandidate}");
+    Console.WriteLine($"OE root: {cmeBond.CmeOpalEngramRootId}");
+    Console.WriteLine($"SelfGEL root: {cmeBond.CmeSelfGelRootId}");
+    Console.WriteLine($"Bond state: {cmeBond.BondState}");
+    Console.WriteLine($"Vehicle ready: {cmeBond.VehicleReady}");
+    Console.WriteLine($"Tool body idle held: {cmeBond.SourceToolBodyIdleHeld}");
+    Console.WriteLine($"Engine tick witnessed: {cmeBond.SourceLlmTickHeld}");
+    Console.WriteLine($"Product output witness committed: {cmeBond.SourceProductOutputWitnessCommitted}");
+    Console.WriteLine($"Ready for CME.Actual admission review: {cmeBond.ReadyForCmeActualAdmissionReview}");
+    Console.WriteLine($"CME.Actual candidate only: {cmeBond.CmeActualCandidateOnly}");
+    Console.WriteLine($"CME.Actual bonded candidate: {cmeBond.CmeActualBondedCandidate}");
+    Console.WriteLine($"CME.Actual admitted: {cmeBond.CmeActualAdmitted}");
+    Console.WriteLine($"CME.Actual activated: {cmeBond.CmeActualActivated}");
+    Console.WriteLine($"Heartbeat prepared: {cmeBond.HeartbeatPrepared}");
+    Console.WriteLine($"Heartbeat active: {cmeBond.HeartbeatActive}");
+    Console.WriteLine($"Runtime identity emitted: {cmeBond.RuntimeIdentityEmitted}");
+    Console.WriteLine($"Authority granted: {cmeBond.AuthorityGranted}");
+    Console.WriteLine($"Action authorized: {cmeBond.ActionAuthorized}");
+    Console.WriteLine($"CME bond JSON: {cmeBond.ReceiptJsonPath}");
+    Console.WriteLine($"CME bond Markdown: {cmeBond.ReceiptMarkdownPath}");
+    Console.WriteLine($"CME bond ledger: {cmeBond.SessionLedgerPath}");
+    return installed.Disposition == SanctuaryInstalledSubstrateDisposition.InstalledCold &&
+        ecLoop.Disposition == SanctuaryEcTelemetryLoopDisposition.CompletedCold &&
+        warmUse.Disposition == SanctuaryTypedWarmUseRehearsalDisposition.CompletedCold &&
+        labGel.Disposition == SanctuaryLabGelEngrammitizationDisposition.CompletedCold &&
+        toolIdle.Disposition == SanctuaryToolBodyIdleStateDisposition.CompletedCold &&
+        agentIdle.Disposition == SanctuaryAgentEngineIdleReadinessDisposition.CompletedCold &&
+        llmReady.Disposition == SanctuaryLlmInterconnectReadinessDisposition.CompletedCold &&
+        llmTick.Disposition == SanctuaryLlmTickCycleDisposition.CompletedCold &&
+        cmeBond.Disposition == SanctuaryCmeActualBondingProcessDisposition.CompletedCold
+        ? 0
+        : 1;
+}
+
 if (string.Equals(command, "sanctuary-actual-test-profile", StringComparison.OrdinalIgnoreCase))
 {
     var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
@@ -449,6 +959,11 @@ static bool IsSupportedCommand(string command) =>
     IsSanctuaryEcLoopCommand(command) ||
     IsSanctuaryWarmUseCommand(command) ||
     IsSanctuaryLabGelCommand(command) ||
+    IsSanctuaryToolBodyIdleCommand(command) ||
+    IsSanctuaryAgentEngineIdleCommand(command) ||
+    IsSanctuaryLlmInterconnectReadyCommand(command) ||
+    IsSanctuaryLlmTickCommand(command) ||
+    IsSanctuaryCmeBondCommand(command) ||
     string.Equals(command, "sanctuary-actual-test-profile", StringComparison.OrdinalIgnoreCase) ||
     IsFirstRiderCommand(command) ||
     IsSpiralBuildCommand(command);
@@ -468,6 +983,26 @@ static bool IsSanctuaryWarmUseCommand(string command) =>
 static bool IsSanctuaryLabGelCommand(string command) =>
     string.Equals(command, "sanctuary-lab-gel", StringComparison.OrdinalIgnoreCase) ||
     string.Equals(command, "lab-gel", StringComparison.OrdinalIgnoreCase);
+
+static bool IsSanctuaryToolBodyIdleCommand(string command) =>
+    string.Equals(command, "sanctuary-tool-idle", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "tool-idle", StringComparison.OrdinalIgnoreCase);
+
+static bool IsSanctuaryAgentEngineIdleCommand(string command) =>
+    string.Equals(command, "sanctuary-agent-idle", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "agent-idle", StringComparison.OrdinalIgnoreCase);
+
+static bool IsSanctuaryLlmInterconnectReadyCommand(string command) =>
+    string.Equals(command, "sanctuary-llm-ready", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "llm-ready", StringComparison.OrdinalIgnoreCase);
+
+static bool IsSanctuaryLlmTickCommand(string command) =>
+    string.Equals(command, "sanctuary-llm-tick", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "llm-tick", StringComparison.OrdinalIgnoreCase);
+
+static bool IsSanctuaryCmeBondCommand(string command) =>
+    string.Equals(command, "sanctuary-cme-bond", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "cme-bond", StringComparison.OrdinalIgnoreCase);
 
 static bool IsFirstRiderCommand(string command) =>
     string.Equals(command, "first-rider-test", StringComparison.OrdinalIgnoreCase) ||

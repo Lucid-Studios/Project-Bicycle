@@ -1,4 +1,5 @@
 using San.Product.Preflight;
+using San.Sanctuary.Runtime;
 
 var command = args.FirstOrDefault(static arg => !arg.StartsWith("--", StringComparison.Ordinal)) ?? "preflight";
 var lineRoot = ReadOption(args, "--line-root");
@@ -10,10 +11,18 @@ var verificationSettingPath = ReadOption(args, "--verification-setting");
 var labContextRoot = ReadOption(args, "--lab-context-root");
 var buildTestingPointer = ReadOption(args, "--build-testing-pointer");
 var riderThought = ReadOption(args, "--thought");
+var operatorName = ReadOption(args, "--operator-name");
+var domain = ReadOption(args, "--domain");
+var role = ReadOption(args, "--role");
+var jobClass = ReadOption(args, "--job-class");
+var sliLispRuntimePath = ReadOption(args, "--sli-lisp-runtime");
+var sessionId = ReadOption(args, "--session-id");
+var turnIndexText = ReadOption(args, "--turn-index");
+var priorTurnReceiptHandle = ReadOption(args, "--prior-turn-receipt");
 
 if (!IsSupportedCommand(command))
 {
-    Console.Error.WriteLine($"Unsupported command '{command}'. Use status, preflight, verify, refuse-activation, install, sanctuary-actual-test-profile, first-rider-test, spiral-build-map, spiral-build-next, or spiral-build-execute.");
+    Console.Error.WriteLine($"Unsupported command '{command}'. Use status, preflight, verify, refuse-activation, install, sanctuary-init-bodies, init-bodies, sanctuary-ec-loop, ec-loop, sanctuary-warm-use, warm-use, sanctuary-actual-test-profile, first-rider-test, spiral-build-map, spiral-build-next, or spiral-build-execute.");
     return 2;
 }
 
@@ -57,6 +66,131 @@ if (string.Equals(command, "install", StringComparison.OrdinalIgnoreCase))
     Console.WriteLine($"Install receipt JSON: {Path.Combine(installReceipt.InstallRootPath, "SANCTUARY_INSTALL_RECEIPT.json")}");
     Console.WriteLine($"Install receipt Markdown: {Path.Combine(installReceipt.InstallRootPath, "SANCTUARY_INSTALL_RECEIPT.md")}");
     return installReceipt.Disposition == ProductBodyInstallDisposition.InstalledCold ? 0 : 1;
+}
+
+if (IsSanctuaryInitBodiesCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var receipt = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "Sanctuary" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Sanctuary" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "InstalledBody" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "ColdBench" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Disposition: {receipt.Disposition}");
+    Console.WriteLine($"Outcome: {receipt.OutcomeCode}");
+    Console.WriteLine($"Sanctuary ID: {receipt.RootIdentity.SanctuaryId}");
+    Console.WriteLine($"Operator ID: {receipt.RootIdentity.OperatorId}");
+    Console.WriteLine($"Actual candidate: {receipt.RootIdentity.ActualNameCandidate}");
+    Console.WriteLine($"OE root: {receipt.RootIdentity.OpalEngramRootId}");
+    Console.WriteLine($"SelfGEL root: {receipt.RootIdentity.SelfGelRootId}");
+    Console.WriteLine($"Bodies: {receipt.Bodies.Count}");
+    Console.WriteLine($"Base bodies installed: {receipt.BaseBodiesInstalled}");
+    Console.WriteLine($"Condensate bodies installed: {receipt.CondensateBodiesInstalled}");
+    Console.WriteLine($"Role bodies installed: {receipt.RoleBodiesInstalled}");
+    Console.WriteLine($"SLI.Lisp load: {receipt.SliLispLoadReceipt?.Disposition.ToString() ?? "none"}");
+    Console.WriteLine($"Activation refused: {receipt.ActivationRefused}");
+    Console.WriteLine($"CME.Actual allowed: {receipt.CmeActualAllowed}");
+    Console.WriteLine($"Receipt JSON: {receipt.ReceiptJsonPath}");
+    Console.WriteLine($"Receipt Markdown: {receipt.ReceiptMarkdownPath}");
+    return receipt.Disposition == SanctuaryInstalledSubstrateDisposition.InstalledCold ? 0 : 1;
+}
+
+if (IsSanctuaryEcLoopCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var installed = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "Sanctuary" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Sanctuary" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "InstalledBody" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "ColdBench" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var loop = new DefaultSanctuaryEcTelemetryLoopService().Run(
+        new SanctuaryEcTelemetryLoopRequest(
+            InstalledSubstrateReceipt: installed,
+            ThoughtForm: riderThought ?? "idle cold EC telemetry loop",
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Install disposition: {installed.Disposition}");
+    Console.WriteLine($"Install outcome: {installed.OutcomeCode}");
+    Console.WriteLine($"Loop disposition: {loop.Disposition}");
+    Console.WriteLine($"Loop outcome: {loop.OutcomeCode}");
+    Console.WriteLine($"Engine owner: {loop.SliLispEngineReceipt?.Telemetry.GetValueOrDefault("engine-owner") ?? "none"}");
+    Console.WriteLine($"Bounded entrypoint: {loop.SliLispEngineReceipt?.Telemetry.GetValueOrDefault("bounded-entrypoint") ?? "none"}");
+    Console.WriteLine($"Listening Frame received: {loop.ListeningFrameReceived}");
+    Console.WriteLine($"Compass oriented pressure: {loop.CompassOrientedPressure}");
+    Console.WriteLine($"Thinking telemetry produced: {loop.ThinkingAboutThinkingTelemetryProduced}");
+    Console.WriteLine($"Pre-engram residue count: {loop.PreEngramResidueCount}");
+    Console.WriteLine($"Steward reviewed: {loop.StewardReviewed}");
+    Console.WriteLine($"CME.Actual allowed: {loop.CmeActualAllowed}");
+    Console.WriteLine($"Loop JSON: {loop.ReceiptJsonPath}");
+    Console.WriteLine($"Loop Markdown: {loop.ReceiptMarkdownPath}");
+    return loop.Disposition == SanctuaryEcTelemetryLoopDisposition.CompletedCold ? 0 : 1;
+}
+
+if (IsSanctuaryWarmUseCommand(command))
+{
+    var resolvedInstallRoot = string.IsNullOrWhiteSpace(installRoot)
+        ? DefaultProductBodyInstallService.ResolveDefaultInstallRoot(resolvedLineRoot)
+        : Path.GetFullPath(installRoot);
+    var installed = new DefaultSanctuaryInstalledSubstrateService().Install(
+        new SanctuaryInstalledSubstrateRequest(
+            LineRootPath: resolvedLineRoot,
+            InstallRootPath: resolvedInstallRoot,
+            OperatorName: string.IsNullOrWhiteSpace(operatorName) ? "Sanctuary" : operatorName,
+            Domain: string.IsNullOrWhiteSpace(domain) ? "Sanctuary" : domain,
+            Role: string.IsNullOrWhiteSpace(role) ? "InstalledBody" : role,
+            JobClass: string.IsNullOrWhiteSpace(jobClass) ? "ColdBench" : jobClass,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+    var turnIndex = int.TryParse(turnIndexText, out var parsedTurnIndex)
+        ? parsedTurnIndex
+        : 0;
+    var warmUse = new DefaultSanctuaryTypedWarmUseRehearsalService().Run(
+        new SanctuaryTypedWarmUseRehearsalRequest(
+            InstalledSubstrateReceipt: installed,
+            SessionId: string.IsNullOrWhiteSpace(sessionId) ? "warm-use-session" : sessionId,
+            TurnIndex: turnIndex,
+            ThoughtForm: riderThought ?? "idle typed warm-use rehearsal",
+            PriorTurnReceiptHandle: priorTurnReceiptHandle,
+            SliLispRuntimePath: sliLispRuntimePath),
+        DateTimeOffset.UtcNow);
+
+    Console.WriteLine($"Sanctuary launcher command: {command}");
+    Console.WriteLine($"Install disposition: {installed.Disposition}");
+    Console.WriteLine($"Install outcome: {installed.OutcomeCode}");
+    Console.WriteLine($"Warm-use disposition: {warmUse.Disposition}");
+    Console.WriteLine($"Warm-use outcome: {warmUse.OutcomeCode}");
+    Console.WriteLine($"Engine owner: {warmUse.SliLispWarmUseReceipt?.Telemetry.GetValueOrDefault("engine-owner") ?? "none"}");
+    Console.WriteLine($"Bounded entrypoint: {warmUse.SliLispWarmUseReceipt?.Telemetry.GetValueOrDefault("bounded-entrypoint") ?? "none"}");
+    Console.WriteLine($"Session ID: {warmUse.SessionId}");
+    Console.WriteLine($"Turn index: {warmUse.TurnIndex}");
+    Console.WriteLine($"Typed scope accepted: {warmUse.TypedScopeAccepted}");
+    Console.WriteLine($"Live ingress accepted cold: {warmUse.LiveIngressAcceptedCold}");
+    Console.WriteLine($"Pre-engram residue count: {warmUse.PreEngramResidueCount}");
+    Console.WriteLine($"Steward reviewed: {warmUse.StewardReviewed}");
+    Console.WriteLine($"CME.Actual allowed: {warmUse.CmeActualAllowed}");
+    Console.WriteLine($"Turn JSON: {warmUse.ReceiptJsonPath}");
+    Console.WriteLine($"Turn Markdown: {warmUse.ReceiptMarkdownPath}");
+    Console.WriteLine($"Session ledger: {warmUse.SessionLedgerPath}");
+    Console.WriteLine($"Session summary: {warmUse.SessionSummaryPath}");
+    return warmUse.Disposition == SanctuaryTypedWarmUseRehearsalDisposition.CompletedCold ? 0 : 1;
 }
 
 if (string.Equals(command, "sanctuary-actual-test-profile", StringComparison.OrdinalIgnoreCase))
@@ -246,9 +380,24 @@ static bool IsSupportedCommand(string command) =>
     string.Equals(command, "verify", StringComparison.OrdinalIgnoreCase) ||
     string.Equals(command, "refuse-activation", StringComparison.OrdinalIgnoreCase) ||
     string.Equals(command, "install", StringComparison.OrdinalIgnoreCase) ||
+    IsSanctuaryInitBodiesCommand(command) ||
+    IsSanctuaryEcLoopCommand(command) ||
+    IsSanctuaryWarmUseCommand(command) ||
     string.Equals(command, "sanctuary-actual-test-profile", StringComparison.OrdinalIgnoreCase) ||
     IsFirstRiderCommand(command) ||
     IsSpiralBuildCommand(command);
+
+static bool IsSanctuaryInitBodiesCommand(string command) =>
+    string.Equals(command, "sanctuary-init-bodies", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "init-bodies", StringComparison.OrdinalIgnoreCase);
+
+static bool IsSanctuaryEcLoopCommand(string command) =>
+    string.Equals(command, "sanctuary-ec-loop", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "ec-loop", StringComparison.OrdinalIgnoreCase);
+
+static bool IsSanctuaryWarmUseCommand(string command) =>
+    string.Equals(command, "sanctuary-warm-use", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(command, "warm-use", StringComparison.OrdinalIgnoreCase);
 
 static bool IsFirstRiderCommand(string command) =>
     string.Equals(command, "first-rider-test", StringComparison.OrdinalIgnoreCase) ||

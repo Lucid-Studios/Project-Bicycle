@@ -16,7 +16,7 @@ public sealed class ProductBodyPreflightTests
         Assert.Equal(ProductBodyPreflightDisposition.VerifiedCold, status.Disposition);
         Assert.Equal("cold-product-body-preflight-verified", status.OutcomeCode);
         Assert.Equal("Project Bicycle", status.Manifest!.LineName);
-        Assert.Equal("0.3.0", status.Manifest.LineVersion);
+        Assert.Equal("0.5.0", status.Manifest.LineVersion);
         Assert.Equal("standalone-tool-body", status.Manifest.Posture);
         Assert.Equal("", status.Manifest.ParentLine);
         Assert.Equal("Project Bicycle", status.Manifest.ActiveExecutableTruth);

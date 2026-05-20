@@ -27,5 +27,6 @@
     <ProjectReference Include="..\..\..\src\SLI\SLI.Lisp\SLI.Lisp.csproj" />
     <ProjectReference Include="..\..\..\src\SLI\SLI.Runtime\SLI.Runtime.csproj" />
     <ProjectReference Include="..\..\..\src\San\San.Product.Preflight\San.Product.Preflight.csproj" />
+    <ProjectReference Include="..\..\..\src\San\San.Sanctuary.Runtime\San.Sanctuary.Runtime.csproj" />
   </ItemGroup>
 </Project>

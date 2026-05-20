@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\San.Product.Preflight\San.Product.Preflight.csproj" />
-    <ProjectReference Include="..\San.Sanctuary.Runtime\San.Sanctuary.Runtime.csproj" />
+    <ProjectReference Include="..\San.Common\San.Common.csproj" />
+    <ProjectReference Include="..\..\SLI\SLI.Lisp\SLI.Lisp.csproj" />
   </ItemGroup>
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>

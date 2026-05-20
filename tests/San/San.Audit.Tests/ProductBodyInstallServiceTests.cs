@@ -139,7 +139,7 @@ public sealed class ProductBodyInstallServiceTests
                 """
                 {
                   "lineName": "Project Bicycle",
-                  "lineVersion": "0.3.0",
+                  "lineVersion": "0.4.0",
                   "posture": "standalone-tool-body",
                   "solutionPath": "San.sln",
                   "parentLine": "",

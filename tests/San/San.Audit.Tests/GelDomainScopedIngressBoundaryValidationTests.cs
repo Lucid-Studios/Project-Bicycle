@@ -213,7 +213,7 @@ public sealed class GelDomainScopedIngressBoundaryValidationTests
         var root = manifest.RootElement;
         var notes = root.GetProperty("notes").EnumerateArray().Select(static note => note.GetString() ?? string.Empty).ToArray();
 
-        Assert.Equal("0.3.0", root.GetProperty("lineVersion").GetString());
+        Assert.Equal("0.5.0", root.GetProperty("lineVersion").GetString());
         Assert.Contains(notes, note => note.Contains("standalone root-level tool package", StringComparison.Ordinal));
         Assert.Contains(notes, note => note.Contains("Activation, model binding, runtime identity", StringComparison.Ordinal));
     }

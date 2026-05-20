@@ -17,7 +17,7 @@ public sealed class SliLispRuntimeLoadServiceTests
         Assert.Equal(SliLispRuntimeLoadDisposition.LoadedCold, receipt.Disposition);
         Assert.Equal("sli-lisp-resident-membrane-loaded-cold", receipt.OutcomeCode);
         Assert.Equal("SBCL", receipt.RuntimeKind);
-        Assert.Equal(43, receipt.ModuleCount);
+        Assert.Equal(45, receipt.ModuleCount);
         Assert.Contains("core.lisp", receipt.ModuleNames);
         Assert.Contains("peer-review-predicate-bridge.lisp", receipt.ModuleNames);
         Assert.True(receipt.LoadedFromEmbeddedResources);
@@ -26,7 +26,7 @@ public sealed class SliLispRuntimeLoadServiceTests
         Assert.True(receipt.ResidentModuleLoadAllowed);
         Assert.True(receipt.TopLevelLoadEvaluationExpected);
         Assert.Contains("SAN-SLI-LISP-RUNTIME-LOAD-BEGIN", receipt.StandardOutput, StringComparison.Ordinal);
-        Assert.Contains("SAN-SLI-LISP-RUNTIME-LOAD-OK module-count=43", receipt.StandardOutput, StringComparison.Ordinal);
+        Assert.Contains("SAN-SLI-LISP-RUNTIME-LOAD-OK module-count=45", receipt.StandardOutput, StringComparison.Ordinal);
         Assert.False(receipt.ArbitraryEvaluationAllowed);
         Assert.False(receipt.RuntimeActionAllowed);
         Assert.False(receipt.ActivationAllowed);

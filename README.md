@@ -14,7 +14,9 @@ CME.Actual, Sanctuary.Actual, or production readiness.
 - build metadata: `build/`
 - wrapper scripts: `build.ps1` and `test.ps1`
 - hygiene tooling: `tools/`
+- published bench telemetry: `bench/`
 - SLI.Lisp membrane source: `src/SLI/SLI.Lisp/`
+- Sanctuary installed-body runtime: `src/San/San.Sanctuary.Runtime/`
 
 The package intentionally does not include legacy OAN Mortalis line folders or
 doctrine-documentation bundles.
@@ -32,6 +34,104 @@ CME.Actual / Sanctuary.Actual has been granted.
 Future Lisp execution lanes beyond resident membrane load require explicit
 authority gates. Arbitrary eval, model binding, action, GEL promotion, and
 activation remain refused.
+
+## Sanctuary Installed Body
+
+This release adds a cold installed-body initializer:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" init-bodies --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary"
+```
+
+The initializer live-loads the resident SLI.Lisp membrane, then composes these
+cold installed bodies:
+
+- `Sanctuary.GEL`
+- `Sanctuary.GoA`
+- `Sanctuary.MoS`
+- `Sanctuary.Vault`
+- `Sanctuary.cGEL`
+- `Sanctuary.cGoA`
+- `Sanctuary.cMoS`
+- `Sanctuary.cVault`
+- `Prime`
+- `Cryptic`
+- `Steward`
+
+It also roots the naming lane:
+
+```text
+YourNameHere.CME.Actual
+YourNameHere.ID
+OE.YourNameHere.ID
+SelfGEL.YourNameHere.ID
+```
+
+Those names are candidate and receipt surfaces only. The initializer does not
+activate heartbeat, admit CME.Actual, admit continuity, bind a model, authorize
+action, open arbitrary Lisp evaluation, or grant Sanctuary.Actual.
+
+## Bounded SLI.Lisp EC Loop
+
+The first EC engine test lane is owned by SLI.Lisp, not by C#:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" ec-loop --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary" --thought "Can the body inspect predicate pressure without becoming authority?"
+```
+
+The C# host installs the cold Sanctuary bodies, invokes the bounded Lisp
+entrypoint `run-ec-telemetry-loop`, and writes receipts. The Lisp body emits the
+engine telemetry:
+
+- Listening Frame received;
+- SLI membrane interpreted predicate pressure;
+- Compass oriented and cooled pressure;
+- SoulFrame and AgentiCore telemetry received;
+- thinking-about-thinking telemetry produced;
+- six pre-engram residue classes surfaced;
+- Steward reviewed.
+
+The loop remains cold. The emitted residue is not an admitted engram, memory,
+SelfGEL mutation, continuity, authority, action, model binding, arbitrary Lisp
+evaluation, CME.Actual, or Sanctuary.Actual.
+
+The first published bench run lives at:
+
+```text
+bench/ec-telemetry-loop/README.md
+bench/ec-telemetry-loop/ec-telemetry-loop-bench.v0.4.0.json
+```
+
+That bench shows predicate-weather variation across seven cold rides plus a
+missing-runtime control. The control verifies that the host withholds rather
+than faking EC telemetry when the Lisp runtime is unavailable.
+
+## Typed Warm-Use Rehearsal
+
+The first live-session rehearsal lane remains SLI.Lisp-owned:
+
+```powershell
+dotnet ".\src\San\San.Launcher\bin\Release\net8.0\San.Launcher.dll" warm-use --line-root "$PWD" --install-root "$env:TEMP\ProjectBicycleSanctuary" --operator-name "YourNameHere" --domain "Civic" --role "PaternalCareAssistance" --job-class "Listening" --session-id "lab-session" --turn-index 0 --thought "Can live scoped ingress remain receipt-only without becoming authority?"
+```
+
+The host installs the cold Sanctuary body, invokes the bounded Lisp entrypoint
+`run-typed-warm-use-rehearsal`, writes a turn receipt, appends a session JSONL
+ledger, and writes a session summary.
+
+Warm-use rehearsal means live typed thought-form ingress under
+operator/domain/role/job scope. It does not mean warm agency, model binding,
+memory admission, SelfGEL mutation, continuity admission, runtime action,
+CME.Actual, or Sanctuary.Actual.
+
+The first thirty-turn bench lives at:
+
+```text
+bench/typed-warm-use-rehearsal/README.md
+bench/typed-warm-use-rehearsal/typed-warm-use-rehearsal-bench.v0.5.0.json
+```
+
+That bench shows repeated live scoped ingress with prior-turn receipt lineage
+and append-only session ledger evidence while preserving non-admission.
 
 ## Core Law
 
@@ -66,7 +166,7 @@ Run the wrapper path:
 Expected result for this release:
 
 ```text
-3095 passed
+3112 passed
 0 failed
 ```
 
